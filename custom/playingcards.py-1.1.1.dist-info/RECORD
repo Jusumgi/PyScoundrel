@@ -1,0 +1,15 @@
+playingcards.py-1.1.1.dist-info/INSTALLER,sha256=zuuue4knoyJ-UwPPXg8fezS7VCrXJQrAP7zeNuwvFQg,4
+playingcards.py-1.1.1.dist-info/LICENSE,sha256=JB7ZSyo_qxenS_A3BULx9BgS6AeQxak9IQ7sQw0eE_Q,1069
+playingcards.py-1.1.1.dist-info/METADATA,sha256=3QI6SVrVJkLuRIW6WAOHGPIt6l4MLAMIZmdTWyC9aBk,6885
+playingcards.py-1.1.1.dist-info/RECORD,,
+playingcards.py-1.1.1.dist-info/REQUESTED,sha256=47DEQpj8HBSa-_TImW-5JCeuQeRkm5NMpJWZG3hSuFU,0
+playingcards.py-1.1.1.dist-info/WHEEL,sha256=G16H4A3IeoQmnOrYV4ueZGKSjhipXx8zc8nu9FGlvMA,92
+playingcards.py-1.1.1.dist-info/top_level.txt,sha256=uGzLpQwPxx99J26i4kNqmp2LRVwhGe090olh-78c9Mg,13
+playingcards/__init__.py,sha256=p_okMPEadPqpWkqcXRSFehT_xXgH91PC0T1wvKGcRJk,167
+playingcards/__pycache__/__init__.cpython-311.pyc,,
+playingcards/__pycache__/card.cpython-311.pyc,,
+playingcards/__pycache__/cardcollection.cpython-311.pyc,,
+playingcards/__pycache__/deck.cpython-311.pyc,,
+playingcards/card.py,sha256=wS53Ew9WZArsMO7woVmJ0CWzbI3PUDmbzNUiGcQlyE4,2217
+playingcards/cardcollection.py,sha256=1iMzAofLef-RWctV81f23L188Z_xN4wzR9fkqwP_8fw,1570
+playingcards/deck.py,sha256=WFejXCsc-pfGXe8BguEGgjh7F_F50v8sBKG_8nBkEJc,1679
