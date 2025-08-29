@@ -24,7 +24,7 @@ class Card:
         raise InvalidCardParameters
 
     def __generate_card(self):
-        value = random.randint(1, 14)
+        value = random.randint(1, 13)
         suit = random.randint(0, 3)
         return value, suit
 

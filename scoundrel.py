@@ -14,6 +14,7 @@ def playGame(deck):
     player = {
         'health': 20,
         'weapon': 0,
+        'firststrike': False,
         'durability': 14,
         'potionUse': 1,
         'fleeUse': 1
@@ -48,27 +49,75 @@ def playGame(deck):
                                 foundEnemies['room_position'].append(index)
                         if foundEnemy:
                             print_cards_horizontal(foundEnemies['available'])
-                            print("Select a weapon by typing it's rank followed by it's suit #S or #C")
-                            while True:
-                                enemyChoice = input()
-                                enemyRank = str(enemyChoice)[0]
-                                enemySuit = str(enemyChoice)[1]
-                                if enemyRank in foundEnemies['value'] and enemySuit in foundEnemies["suit"]:
-                                    print('enemyRank',enemyRank)
-                                    print('enemySuit',enemySuit)
-                                    selectedEnemy = foundEnemies["value"].index(enemyRank)
-                                    enemyPosition = foundEnemies["room_position"][selectedEnemy]
-                                    if room.cards[enemyPosition].value == 1:
-                                        damage = 14 - player["weapon"]
-                                        player['health'] = player['health'] - damage
-                                    else:
-                                        damage = room.cards[enemyPosition].value - player["weapon"]
-                                    if damage <= 0:
-                                        damage = 0
-                                    player['health'] = player['health'] - damage
-                                    room.remove_card(enemyPosition)
-                                    print(f"Player takes {damage} damage")
-                                    break
+                            print("Select an enemy by typing it's rank followed by it's suit #S or #C")
+                            print(player)
+                            enemyChoice = input()
+                            enemyRank = str(enemyChoice)[0]
+                            enemySuit = str(enemyChoice)[1]
+                            if enemyRank in foundEnemies['value'] and enemySuit in foundEnemies["suit"]:
+                                print('enemyRank',enemyRank)
+                                print('enemySuit',enemySuit)
+                                selectedEnemy = foundEnemies["value"].index(enemyRank)
+                                enemyPosition = foundEnemies["room_position"][selectedEnemy]
+                                enemyStrength = room.cards[enemyPosition].value
+                                if enemyStrength == 1:
+                                    enemyStrength = 14
+                                print('Use (w)eapon or (b)are hands?')
+                                print('Press c to cancel this action')
+                                while True:
+                                    weapon = input()
+                                    match weapon:
+                                        case 'w':
+                                            try: 
+                                                while True:
+                                                    if player['weapon'] == 0:
+                                                        print("You don't have a weapon, so you throw hands.")
+                                                        weapon = player['weapon']
+                                                        break
+                                                    if player['firststrike']:
+                                                        player['durability'] = enemyStrength
+                                                        print("FS DURABILITY ", player['durability'])
+                                                        player['firststrike'] = False
+                                                        weapon = player['weapon']
+                                                        break
+                                                    print("DURABILITY ", player['durability'])
+                                                    if enemyStrength < player['durability'] :
+                                                        weapon = player['weapon']
+                                                        player['durability'] = enemyStrength
+                                                        break
+                                                    else:
+                                                        break
+                                                
+                                                if enemyStrength == 1:
+                                                    damage = 14 - weapon
+                                                    player['health'] = player['health'] - damage
+                                                else:
+                                                    damage = enemyStrength - weapon
+                                                if damage <= 0:
+                                                    damage = 0
+                                                player['health'] = player['health'] - damage
+                                                room.remove_card(enemyPosition)
+                                                print(f"Player takes {damage} damage")
+                                                break
+                                            except:
+                                                print("Your weapon would break from this attack.")
+                                                break
+                                        case 'b':
+                                            weapon = 0
+                                            if enemyStrength == 1:
+                                                damage = 14 - weapon
+                                                player['health'] = player['health'] - damage
+                                            else:
+                                                damage = enemyStrength - weapon
+                                            if damage <= 0:
+                                                damage = 0
+                                            player['health'] = player['health'] - damage
+                                            room.remove_card(enemyPosition)
+                                            print(f"Player takes {damage} damage")
+                                            break
+                                        case 'c':
+                                            break
+                                    
                         if not foundEnemy:
                             print("No Enemies")
                     case 'w':
@@ -96,6 +145,8 @@ def playGame(deck):
                                         print('passed')
                                         selectedWeapon = foundWeapons["value"].index(weaponChoice)
                                         player["weapon"] = weaponChoice
+                                        player["durability"] = 14
+                                        player['firststrike'] = True
                                         room.remove_card(foundWeapons["room_position"][selectedWeapon])
                                         break
                                 else:
