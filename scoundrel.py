@@ -1,6 +1,6 @@
 from custom.playingcardsscoundrel import Deck
 from tools import *
-from colorama import Back
+
 def newGame():
     # Generates new deck, removes cards for normal-mode
     freshdeck = Deck() # generate standard 52-card deck
@@ -17,9 +17,11 @@ def playGame(deck):
         'firststrike': False,
         'durability': 14,
         'potionUse': 1,
-        'fleeUse': 1
+        'fleeUse': 2,
+        'hasFled': False
     }
     room = deck.draw_n(4)
+    # print(dir(deck.cards))
     
     while True:
         # try:
@@ -28,6 +30,9 @@ def playGame(deck):
                 print('What would you like to do?')
                 print("HEALTH: ",player["health"])
                 print("WEAPON: ",player["weapon"])
+                print("DURABILITY: ",player['durability'])
+                print("CARDS LEFT: ",len(deck.cards))
+                print(f"{'You are exhausted.' if player['fleeUse']<2 else 'You feel like you could out run them.'}")
                 print("a - Attack | w - Wield | p - Use Potion | f - Flee")
                 choice = getchit()
                 match choice:
@@ -51,7 +56,9 @@ def playGame(deck):
                             print_cards_horizontal(foundEnemies['available'])
                             print("Select an enemy by typing it's rank followed by it's suit #S or #C")
                             print(player)
-                            enemyChoice = input()
+                            enemyChoice = '0'
+                            while len(enemyChoice) != 2:
+                                enemyChoice = input()
                             enemyRank = str(enemyChoice)[0]
                             enemySuit = str(enemyChoice)[1]
                             if enemyRank in foundEnemies['value'] and enemySuit in foundEnemies["suit"]:
@@ -72,17 +79,17 @@ def playGame(deck):
                                                 while True:
                                                     if player['weapon'] == 0:
                                                         print("You don't have a weapon, so you throw hands.")
-                                                        weapon = player['weapon']
+                                                        weapon = int(player['weapon'])
                                                         break
-                                                    if player['firststrike']:
+                                                    elif player['firststrike']:
                                                         player['durability'] = enemyStrength
                                                         print("FS DURABILITY ", player['durability'])
                                                         player['firststrike'] = False
-                                                        weapon = player['weapon']
+                                                        weapon = int(player['weapon'])
                                                         break
-                                                    print("DURABILITY ", player['durability'])
-                                                    if enemyStrength < player['durability'] :
-                                                        weapon = player['weapon']
+                                                    # print("DURABILITY ", player['durability'])
+                                                    elif enemyStrength < player['durability'] :
+                                                        weapon = int(player['weapon'])
                                                         player['durability'] = enemyStrength
                                                         break
                                                     else:
@@ -132,32 +139,89 @@ def playGame(deck):
                             if card.suit_name == 'Diamonds':
                                 foundWeapon = True
                                 foundWeapons["available"].append(card)
-                                foundWeapons["value"].append(card.rank)
+                                foundWeapons["value"].append(str(card.rank))
                                 foundWeapons['room_position'].append(index)
                         if foundWeapon:
                             print_cards_horizontal(foundWeapons['available'])
                             print("Select a weapon by typing it's rank")
                             while True:
-                                weaponChoice = int(input())
+                                weaponChoice = input()
                                 print(type(weaponChoice))
-                                if isinstance(weaponChoice, int):
-                                    if weaponChoice in foundWeapons['value']:
-                                        print('passed')
-                                        selectedWeapon = foundWeapons["value"].index(weaponChoice)
-                                        player["weapon"] = weaponChoice
-                                        player["durability"] = 14
-                                        player['firststrike'] = True
-                                        room.remove_card(foundWeapons["room_position"][selectedWeapon])
-                                        break
-                                else:
-                                    print('Please type a number (range 2-10)')
+                                if weaponChoice in foundWeapons['value']:
+                                    print('passed')
+                                    selectedWeapon = foundWeapons["value"].index(weaponChoice)
+                                    if weaponChoice == 'X':
+                                        player["weapon"] = 10
+                                    else:
+                                        player["weapon"] = int(weaponChoice)
+                                    player["durability"] = 14
+                                    player['firststrike'] = True
+                                    room.remove_card(foundWeapons["room_position"][selectedWeapon])
+                                    break
+
                         if not foundWeapon:
                             print("No weapons available")
+                    case 'p':
+                        foundPotion = False
+                        foundPotions = {
+                            'available': [],
+                            'value': [],
+                            'room_position': []
+                        }
+                        if player['potionUse'] == 0:
+                            print("No potions available")
+                            break
+                        while player['potionUse'] == 1:
+                            for index, card in enumerate(room.cards):
+                                if card.suit_name == 'Hearts':
+                                    foundPotion = True
+                                    foundPotions["available"].append(card)
+                                    foundPotions["value"].append(str(card.rank))
+                                    foundPotions['room_position'].append(index)
+                                print(foundPotions)
+                            if foundPotion:
+                                print_cards_horizontal(foundPotions['available'])
+                                print("Select a potion by typing it's rank")
+                                while True:
+                                    potionChoice = input()
+                                    print(potionChoice)
+                                    print(type(potionChoice))
 
-            nextroom = deck.draw_n(3)
+                                    if potionChoice in foundPotions['value']:
+                                        selectedPotion = foundPotions["value"].index(potionChoice)
+                                        potionPosition = foundPotions["room_position"][selectedPotion]
+                                        potionStrength = room.cards[potionPosition].value
+                                        print('Potion Strength: ',potionStrength)
+                                        player["health"] = player['health'] + potionStrength
+                                        player['potionUse'] = 0
+                                        room.remove_card(foundPotions["room_position"][selectedPotion])
+                                        break
+                        
+                                    if not foundPotion or player['potionUse'] == 0:
+                                        print("No potions available")
+                    case 'f':
+                        # print("too bad you gon die")
+                        if player['fleeUse'] < 2:
+                            print("You are exhausted and cannot flee.")
+                        else:
+                            print("You have fled. All cards have been moved to the bottom of the deck.")
+                            player['fleeUse'] = 0
+                            player['hasFled'] = True
+                            deck.cards.extend(room.cards)
+                            room.cards.clear()
+                            break
+            if player['hasFled'] == True:
+                player['hasFled'] = False
+                nextroom = deck.draw_n(4)
+                player['potionUse'] = 1
+            else:
+                nextroom = deck.draw_n(3)
+                player['potionUse'] = 1
+                if player['fleeUse'] < 2:
+                    player['fleeUse'] = player['fleeUse']+1
+
             for card in nextroom.cards:
                 room.cards.append(card)
-            input()
         # except:
         #     print("End of Deck")
         #     break

@@ -1,14 +1,16 @@
 import os
 import platform
-system = platform.system()
 
+system = platform.system()
 def getchit():
     if system == "Windows":
         import msvcrt
-        return msvcrt.getch()
-    elif system == 'Linux' or system == "Darwin":
-        import getch
-        return getch.getch()
+        byte_input = msvcrt.getch()
+        string_input = byte_input.decode('ascii')
+        return string_input
+    # elif system == 'Linux' or system == "Darwin":
+    #     import getch
+    #     return getch.getch()
     else:
         print("Operating System not supported")
 def clear_screen():
