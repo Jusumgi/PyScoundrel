@@ -143,10 +143,12 @@ def playGame(deck):
                                 foundWeapons['room_position'].append(index)
                         if foundWeapon:
                             print_cards_horizontal(foundWeapons['available'])
-                            print("Select a weapon by typing it's rank")
+                            print("Select a weapon by typing it's rank or enter c to cancel")
                             while True:
                                 weaponChoice = input()
                                 print(type(weaponChoice))
+                                if weaponChoice == 'c':
+                                        break
                                 if weaponChoice in foundWeapons['value']:
                                     print('passed')
                                     selectedWeapon = foundWeapons["value"].index(weaponChoice)
@@ -169,8 +171,7 @@ def playGame(deck):
                             'room_position': []
                         }
                         if player['potionUse'] == 0:
-                            print("No potions available")
-                            break
+                            print("You would pass out from drinking a potion again.")
                         while player['potionUse'] == 1:
                             for index, card in enumerate(room.cards):
                                 if card.suit_name == 'Hearts':
@@ -181,12 +182,13 @@ def playGame(deck):
                                 print(foundPotions)
                             if foundPotion:
                                 print_cards_horizontal(foundPotions['available'])
-                                print("Select a potion by typing it's rank")
+                                print("Select a potion by typing it's rank or enter c to cancel")
                                 while True:
                                     potionChoice = input()
                                     print(potionChoice)
                                     print(type(potionChoice))
-
+                                    if potionChoice == 'c':
+                                        break
                                     if potionChoice in foundPotions['value']:
                                         selectedPotion = foundPotions["value"].index(potionChoice)
                                         potionPosition = foundPotions["room_position"][selectedPotion]
@@ -212,7 +214,7 @@ def playGame(deck):
                             break
             if player['hasFled'] == True:
                 player['hasFled'] = False
-                nextroom = deck.draw_n(4)
+                nextroom = deck.draw_n(4) # need to make a function that draws 1 card at a time, up to a room length of 4. Needs to be able to break out of the for loop when it reaches the end of the deck.
                 player['potionUse'] = 1
             else:
                 nextroom = deck.draw_n(3)
