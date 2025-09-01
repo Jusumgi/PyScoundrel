@@ -52,7 +52,7 @@ def playGame(deck):
                 # nextroom = drawRoom(deck, room)
                 if len(room.cards) == 1 and len(deck.cards) != 0:
                     drawRoom(deck, room)
-                player['potionUse'] = 1
+                    player['potionUse'] = 1
                 if player['fleeUse'] < 2:
                     player['fleeUse'] = player['fleeUse']+1
             while enemies >= 1:
@@ -191,7 +191,7 @@ def playGame(deck):
                                     room.remove_card(foundWeapons["room_position"][selectedWeapon])
                                     break
 
-                        if not foundWeapon:
+                        else:
                             print("No weapons available")
                         break
                     case 'p':
@@ -201,38 +201,39 @@ def playGame(deck):
                             'value': [],
                             'room_position': []
                         }
-                        if player['potionUse'] == 0:
-                            print("You would pass out from drinking a potion again.")
-                        while player['potionUse'] == 1:
-                            for index, card in enumerate(room.cards):
-                                if card.suit_name == 'Hearts':
-                                    foundPotion = True
-                                    foundPotions["available"].append(card)
-                                    foundPotions["value"].append(str(card.rank))
-                                    foundPotions['room_position'].append(index)
-                                print(foundPotions)
-                            if foundPotion:
-                                print_cards_horizontal(foundPotions['available'])
-                                print("Select a potion by typing it's rank or enter c to cancel")
-                                while True:
-                                    potionChoice = input()
-                                    print(potionChoice)
-                                    print(type(potionChoice))
-                                    if potionChoice == 'c':
-                                        break
-                                    if potionChoice in foundPotions['value']:
-                                        selectedPotion = foundPotions["value"].index(potionChoice)
-                                        potionPosition = foundPotions["room_position"][selectedPotion]
-                                        potionStrength = room.cards[potionPosition].value
-                                        print('Potion Strength: ',potionStrength)
-                                        player["health"] = player['health'] + potionStrength
-                                        player['potionUse'] = 0
-                                        room.remove_card(foundPotions["room_position"][selectedPotion])
-                                        break
                         
-                                    if not foundPotion or player['potionUse'] == 0:
-                                        print("No potions available")
-                            break
+                        for index, card in enumerate(room.cards):
+                            if card.suit_name == 'Hearts':
+                                foundPotion = True
+                                foundPotions["available"].append(card)
+                                foundPotions["value"].append(str(card.rank))
+                                foundPotions['room_position'].append(index)
+                        if foundPotion:
+                            print_cards_horizontal(foundPotions['available'])
+                            if player['potionUse'] == 0:
+                                print("You can drink another potion, but it will have no effect.")
+                            print("Select a potion by typing it's rank or enter c to cancel")
+                            while True:
+                                potionChoice = input()
+                                selectedPotion = foundPotions["value"].index(potionChoice)
+                                potionPosition = foundPotions["room_position"][selectedPotion]
+                                potionStrength = room.cards[potionPosition].value
+                                if potionChoice == 'c':
+                                    break
+                                if potionChoice in foundPotions['value'] and player['potionUse'] > 0 :
+                                    print('Potion Strength: ',potionStrength)
+                                    player["health"] = player['health'] + potionStrength
+                                    player['potionUse'] = 0
+                                    room.remove_card(foundPotions["room_position"][selectedPotion])
+                                    break
+                                else:
+                                    room.remove_card(foundPotions["room_position"][selectedPotion])
+                                    break
+                    
+                        else:
+                            print("No potions available")
+                            
+                        break
                     case 'f':
                         # print("too bad you gon die")
                         if player['fleeUse'] < 2:
@@ -248,6 +249,7 @@ def playGame(deck):
                             room.cards.clear()
                             break
             print("ENEMY", enemies)
+
 
             # for card in nextroom.cards:
             #     room.cards.append(card)
