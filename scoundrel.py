@@ -41,7 +41,7 @@ def playGame(deck):
                 # print(dir(deck.cards))
                 drawRoom(deck, room)
                 player['potionUse'] = 1
-            elif len(room.cards) == 0:
+            elif enemies == 0:
                 print("You have survived.")
                 print("Congratulations!")
                 input()
@@ -248,7 +248,6 @@ def playGame(deck):
                             room.cards.clear()
                             break
             print("ENEMY", enemies)
-            
 
             # for card in nextroom.cards:
             #     room.cards.append(card)
