@@ -20,12 +20,42 @@ def playGame(deck):
         'fleeUse': 2,
         'hasFled': False
     }
+    
     room = deck.draw_n(4)
     # print(dir(deck.cards))
     
     while True:
         # try:
-            while len(room.cards) > 1:
+            enemies = 0
+            for card in room.cards:
+                if card.suit <= 1:
+                    enemies = enemies+1
+            for card in deck.cards:
+                if card.suit <= 1:
+                    enemies = enemies+1
+            if player['hasFled'] == True:
+                player['hasFled'] = False
+                # nextroom = deck.draw_n(4) # need to make a function that draws 1 card at a time, up to a room length of 4. Needs to be able to break out of the for loop when it reaches the end of the deck.
+                # nextroom = drawRoom(deck, room)
+                print("fled room")
+                # print(dir(deck.cards))
+                drawRoom(deck, room)
+                player['potionUse'] = 1
+            elif len(room.cards) == 0:
+                print("You have survived.")
+                print("Congratulations!")
+                input()
+                break
+            else:
+                # nextroom = deck.draw_n(3)
+                print(len(deck.cards))
+                # nextroom = drawRoom(deck, room)
+                if len(room.cards) == 1 and len(deck.cards) != 0:
+                    drawRoom(deck, room)
+                player['potionUse'] = 1
+                if player['fleeUse'] < 2:
+                    player['fleeUse'] = player['fleeUse']+1
+            while enemies >= 1:
                 print_cards_horizontal(room)
                 print('What would you like to do?')
                 print("HEALTH: ",player["health"])
@@ -124,9 +154,9 @@ def playGame(deck):
                                             break
                                         case 'c':
                                             break
-                                    
                         if not foundEnemy:
                             print("No Enemies")
+                        break                
                     case 'w':
                         # print(findCards('Weapon', room))
                         foundWeapon = False
@@ -163,6 +193,7 @@ def playGame(deck):
 
                         if not foundWeapon:
                             print("No weapons available")
+                        break
                     case 'p':
                         foundPotion = False
                         foundPotions = {
@@ -201,6 +232,7 @@ def playGame(deck):
                         
                                     if not foundPotion or player['potionUse'] == 0:
                                         print("No potions available")
+                            break
                     case 'f':
                         # print("too bad you gon die")
                         if player['fleeUse'] < 2:
@@ -213,31 +245,10 @@ def playGame(deck):
                             for card in room.cards:
                                 deck.cards.insert(0, card)
                             # deck.cards.extend(room.cards)
-                            print(deck.cards)
                             room.cards.clear()
-                            
-            if player['hasFled'] == True:
-                player['hasFled'] = False
-                # nextroom = deck.draw_n(4) # need to make a function that draws 1 card at a time, up to a room length of 4. Needs to be able to break out of the for loop when it reaches the end of the deck.
-                # nextroom = drawRoom(deck, room)
-                print("fled room")
-                # print(dir(deck.cards))
-                drawRoom(deck, room)
-                player['potionUse'] = 1
-            elif len(room.cards) == 0:
-                print("You have survived.")
-                print("Congratulations!")
-                input()
-                break
-            else:
-                # nextroom = deck.draw_n(3)
-                print(len(deck.cards))
-                # nextroom = drawRoom(deck, room)
-                if len(room.cards) == 1 and len(deck.cards) != 0:
-                    drawRoom(deck, room)
-                player['potionUse'] = 1
-                if player['fleeUse'] < 2:
-                    player['fleeUse'] = player['fleeUse']+1
+                            break
+            print("ENEMY", enemies)
+            
 
             # for card in nextroom.cards:
             #     room.cards.append(card)
