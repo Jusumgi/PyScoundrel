@@ -214,19 +214,44 @@ def playGame(deck):
                             break
             if player['hasFled'] == True:
                 player['hasFled'] = False
-                nextroom = deck.draw_n(4) # need to make a function that draws 1 card at a time, up to a room length of 4. Needs to be able to break out of the for loop when it reaches the end of the deck.
+                # nextroom = deck.draw_n(4) # need to make a function that draws 1 card at a time, up to a room length of 4. Needs to be able to break out of the for loop when it reaches the end of the deck.
+                # nextroom = drawRoom(deck, room)
+                drawRoom(deck, room)
                 player['potionUse'] = 1
+            elif len(room.cards) == 0:
+                print("You have survived.")
+                print("Congratulations!")
+                input()
+                break
             else:
-                nextroom = deck.draw_n(3)
+                # nextroom = deck.draw_n(3)
+                print(len(room.cards))
+                # nextroom = drawRoom(deck, room)
+                if len(room.cards) != 1:
+                    drawRoom(deck, room)
                 player['potionUse'] = 1
                 if player['fleeUse'] < 2:
                     player['fleeUse'] = player['fleeUse']+1
 
-            for card in nextroom.cards:
-                room.cards.append(card)
+            # for card in nextroom.cards:
+            #     room.cards.append(card)
         # except:
         #     print("End of Deck")
         #     break
+    mainMenu()
+def drawRoom(deck, room):
+    while len(room.cards) < 4:
+        try:
+            # print("drawing card")
+            nextroom = deck.draw_card()
+            # print(nextroom)
+            room.cards.append(nextroom)
+        except:
+            print("end of deck")
+            break
+    print(room.cards)
+    return room
+
 
 # def findCards(option, room):
 #     foundCard = False
