@@ -58,7 +58,6 @@ def playGame(deck):
                 choice = getchit()
                 match choice:
                     case 'a':
-                        print("Attacking with weapon")
                         foundEnemy = False
                         foundEnemies = {
                             'available': [],
@@ -227,8 +226,10 @@ def playGame(deck):
                     case 'f':
                         if player['fleeUse'] < 2:
                             print("You are exhausted and cannot flee.")
+                            getchit()
                         else:
                             print("You have fled. All cards have been moved to the bottom of the deck.")
+                            getchit()
                             player['fleeUse'] = 0
                             player['hasFled'] = True
                             print(deck.cards)
