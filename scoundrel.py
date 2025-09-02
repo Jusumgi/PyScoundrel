@@ -1,4 +1,5 @@
 from custom.playingcardsscoundrel import Deck
+from colorama import Fore, Back, Style
 from tools import *
 
 def newGame():
@@ -48,7 +49,7 @@ def playGame(deck):
                         player['fleeUse'] = player['fleeUse']+1
             while enemies >= 1:
                 clear_screen()
-                print(f"❤ {player['health']} ❤ | ⚔ {player['weapon']}:{player['durability']} ⚔ | {enemies} enemies left")
+                print(f"{Fore.RED}❤ {player['health']}{Fore.RED}❤ {Style.RESET_ALL}| {Fore.YELLOW}⚔ {player['weapon']}{Style.RESET_ALL}:{Fore.CYAN}{player['durability']} ⚔ {Style.RESET_ALL}| {enemies} enemies left")
                 print(f"{'You are exhausted.' if player['fleeUse']<2 else 'You feel like you could out run them.'}")
                 print_cards_horizontal(room)
                 print('What would you like to do?')
@@ -74,6 +75,7 @@ def playGame(deck):
                                 foundEnemies['room_position'].append(index)
                         if foundEnemy:
                             print_cards_horizontal(foundEnemies['available'])
+                            print(Style.RESET_ALL)
                             print("Select an enemy by typing it's value/rank or press c to cancel")
                             enemyChoice = lowerisUpper(getchit())
                             if enemyChoice == 'C':
@@ -158,6 +160,7 @@ def playGame(deck):
                                 foundWeapons['room_position'].append(index)
                         if foundWeapon:
                             print_cards_horizontal(foundWeapons['available'])
+                            print(Style.RESET_ALL)
                             print("Select a weapon by typing it's rank or enter c to cancel")
                             while True:
                                 weaponChoice = lowerisUpper(getchit())
@@ -193,6 +196,7 @@ def playGame(deck):
                                 foundPotions['room_position'].append(index)
                         if foundPotion:
                             print_cards_horizontal(foundPotions['available'])
+                            print(Style.RESET_ALL)
                             if player['potionUse'] == 0:
                                 print("You can drink another potion, but it will have no effect.")
                             print("Select a potion by typing it's rank or enter c to cancel")
@@ -263,26 +267,41 @@ def remove_cards_from_deck(deck, remove_list):
     deck.cards = [card for card in deck.cards if card.name not in remove_list]
     return deck
 
-
-
 def print_cards_horizontal(cards, spacing=3):
     """
-    Print a list of cards side by side horizontally.
-
+    Print a list of cards side by side horizontally with conditional coloring.
+    
     Args:
-        cards (list): A list of Card objects with .img (ASCII art).
+        cards (list): A list of Card objects with .img (ASCII art) and .suit.
         spacing (int): Number of spaces between each card.
     """
-    card_art = [card.img.splitlines() for card in cards]
-    # In case the cards are different heights, normalize them
-    max_height = max(len(art) for art in card_art)
-    for art in card_art:
+    
+    # Create colored card art based on the suit
+    colored_card_art = []
+    for card in cards:
+        lines = card.img.splitlines()
+        
+        # Apply red foreground and white background for suits >= 3 (e.g., Hearts)
+        if card.suit >= 2:
+            colored_lines = [Fore.RED + line for line in lines]
+        # Apply black foreground and white background for other suits
+        else:
+            colored_lines = [Fore.WHITE + line for line in lines]
+            
+        colored_card_art.append(colored_lines)
+        
+    max_height = max(len(art) for art in colored_card_art)
+    for art in colored_card_art:
         while len(art) < max_height:
-            art.append(" " * len(art[0]))  # pad shorter cards with spaces
+            # Padding for shorter cards must also have a background color
+            padding_line = Fore.BLACK + " " * len(art[0])
+            art.append(padding_line)
 
     # Print row by row
     for i in range(max_height):
-        print((" " * spacing).join(card[i] for card in card_art))
+        # Join the corresponding line from each colored card art
+        print((" " * spacing).join(art[i] for art in colored_card_art))
+    print(Style.RESET_ALL)
 
 def mainMenu():
     while True:
