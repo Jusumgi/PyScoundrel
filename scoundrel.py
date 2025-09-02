@@ -84,7 +84,9 @@ def playGame(deck):
                             enemyStrength = room.cards[enemyPosition].value
                             if enemyStrength == 1:
                                 enemyStrength = 14
-                            print('The enemy will do ',enemyStrength,' damage')
+                            print(f"Your weapon strength is {player['weapon']}")
+                            print('The enemy strength is ',enemyStrength)
+                            print(f"The weapon durability is {player['durability']}")
                             print('Use (w)eapon or (b)are hands?')
                             print('Press c to cancel this action')
                             while True:
