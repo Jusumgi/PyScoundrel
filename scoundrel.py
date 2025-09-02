@@ -24,34 +24,30 @@ def playGame(deck):
     
     while True:
         # try:
-            enemies = 0
+            enemies = 0 # Enemy counter is tracked to determine when the game is over (as a win condition). Will have to change this when Scoring is implemented
             for card in room.cards:
                 if card.suit <= 1:
                     enemies = enemies+1
             for card in deck.cards:
                 if card.suit <= 1:
                     enemies = enemies+1
-            if player['hasFled'] == True:
+            if player['hasFled'] == True: # This is to ensure that a full room is drawn after a Flee is used.
                 player['hasFled'] = False
                 drawRoom(deck, room)
                 player['potionUse'] = 1
-            elif enemies == 0:
+            elif enemies == 0: # The only win condition
                 print("You have survived.")
                 print("Congratulations!")
                 input()
                 break
             else:
-                if len(room.cards) == 1 and len(deck.cards) != 0:
+                if len(room.cards) == 1 and len(deck.cards) != 0: # ensures that the game continues to draw cards so long as there are cards in the "Deck"
                     drawRoom(deck, room)
                     player['potionUse'] = 1
                     if player['fleeUse'] < 2:
                         player['fleeUse'] = player['fleeUse']+1
             while enemies >= 1:
                 clear_screen()
-                # print("HEALTH: ",player["health"])
-                # print("WEAPON: ",player["weapon"])
-                # print("DURABILITY: ",player['durability'])
-                # print("ENEMIES LEFT: ",enemies)
                 print(f"❤ {player['health']} ❤ | ⚔ {player['weapon']}:{player['durability']} ⚔ | {enemies} enemies left")
                 print(f"{'You are exhausted.' if player['fleeUse']<2 else 'You feel like you could out run them.'}")
                 print_cards_horizontal(room)
@@ -303,9 +299,16 @@ def mainMenu():
             case '2':
                 clear_screen()
                 print("Scoundrel is a single-player Rogue-like card game by Zach Gage and Kurt Bieg")
-                print("Press H for the original rules to Scoundrel, which will open a PDF in your web browser.")
+                print("Press 'H' for the original rules to Scoundrel, which will open a PDF in your web browser.")
                 print("\033[4mHouse Rules/Changes\033[0m")
                 print("Flee can be used at any point within a room, with the same cooldown of 2 rooms.")
+                print("\033[4mUI\033[0m")
+                print("❤ Health ❤| ⚔ Weapon:Durability ⚔")
+                print("\033[4mGeneral Rules\033[0m")                
+                print("* Health maximum is 20. Once health reaches 0, the game ends and your score is tallied based on the value of each remaining enemy as a negative score.")
+                print("* Weapons block incoming damage and when initially equipped have 'first strike' which allows you to hit any enemy.")
+                print("* After an enemy has been hit with a weapon, the player incurs Durability where the next enemy struck must be less than the strength/rank of the monster before it.")
+                print("* Potions can effectively be used once per room. Any other potions used in the same room have no effect and are wasted/discarded.")
                 pdfcall = getchit()
                 if lowerisUpper(pdfcall) == 'H':
                     open_pdf('Scoundrel.pdf')
