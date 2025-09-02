@@ -47,13 +47,15 @@ def playGame(deck):
                     if player['fleeUse'] < 2:
                         player['fleeUse'] = player['fleeUse']+1
             while enemies >= 1:
+                clear_screen()
+                # print("HEALTH: ",player["health"])
+                # print("WEAPON: ",player["weapon"])
+                # print("DURABILITY: ",player['durability'])
+                # print("ENEMIES LEFT: ",enemies)
+                print(f"❤ {player['health']} ❤ | ⚔ {player['weapon']}:{player['durability']} ⚔ | {enemies} enemies left")
+                print(f"{'You are exhausted.' if player['fleeUse']<2 else 'You feel like you could out run them.'}")
                 print_cards_horizontal(room)
                 print('What would you like to do?')
-                print("HEALTH: ",player["health"])
-                print("WEAPON: ",player["weapon"])
-                print("DURABILITY: ",player['durability'])
-                print("ENEMIES LEFT: ",enemies)
-                print(f"{'You are exhausted.' if player['fleeUse']<2 else 'You feel like you could out run them.'}")
                 print("a - Attack | w - Wield | p - Use Potion | f - Flee")
                 # try:
                 choice = getchit()
@@ -231,10 +233,6 @@ def playGame(deck):
                 # except:
                 #     break            
             print("ENEMY", enemies)
-
-
-            # for card in nextroom.cards:
-            #     room.cards.append(card)
         # except:
         #     print("End of Deck")
         #     break
@@ -242,9 +240,7 @@ def playGame(deck):
 def drawRoom(deck, room):
     while len(room.cards) < 4:
         try:
-            # print("drawing card")
             nextroom = deck.draw_card()
-            # print(nextroom)
             room.cards.append(nextroom)
         except:
             print("end of deck")
@@ -291,7 +287,7 @@ def print_cards_horizontal(cards, spacing=3):
 
 def mainMenu():
     while True:
-        # clear_screen()
+        clear_screen()
         print("Welcome to Scoundrel")
         print("Press 1 to Start")
         print("Press 2 for Rules/About")
