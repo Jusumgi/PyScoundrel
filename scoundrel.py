@@ -125,6 +125,7 @@ def playGame(deck):
                                             break
                                         except:
                                             print("Your weapon would break from this attack.")
+                                            input()
                                             break
                                     case 'b':
                                         weapon = 0
@@ -144,6 +145,7 @@ def playGame(deck):
                             break
                         if not foundEnemy:
                             print("No Enemies")
+                            getchit()
                         break                
                     case 'w':
                         foundWeapon = False
@@ -177,6 +179,7 @@ def playGame(deck):
 
                         else:
                             print("No weapons available")
+                            getchit()
                         break
                     case 'p':
                         foundPotion = False
@@ -216,6 +219,7 @@ def playGame(deck):
                     
                         else:
                             print("No potions available")
+                            getchit()
                             
                         break
                     case 'f':
@@ -232,7 +236,6 @@ def playGame(deck):
                             break
                 # except:
                 #     break            
-            print("ENEMY", enemies)
         # except:
         #     print("End of Deck")
         #     break
@@ -298,8 +301,14 @@ def mainMenu():
                 game = newGame()
                 playGame(game)
             case '2':
-                print("Scoundrel is a game")
-                input()
+                clear_screen()
+                print("Scoundrel is a single-player Rogue-like card game by Zach Gage and Kurt Bieg")
+                print("Press H for the original rules to Scoundrel, which will open a PDF in your web browser.")
+                print("\033[4mHouse Rules/Changes\033[0m")
+                print("Flee can be used at any point within a room, with the same cooldown of 2 rooms.")
+                pdfcall = getchit()
+                if lowerisUpper(pdfcall) == 'H':
+                    open_pdf('Scoundrel.pdf')
             case 'q':
                 break
 mainMenu()

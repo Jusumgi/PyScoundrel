@@ -1,5 +1,6 @@
 import os
 import platform
+import webbrowser
 
 system = platform.system()
 def getchit():
@@ -20,3 +21,10 @@ def clear_screen():
         os.system('clear')
     else:
         print("Operating System not supported")
+
+def open_pdf(file_path):
+    if os.path.exists(file_path):
+        webbrowser.open_new(file_path)
+        print(f"Opened PDF: {file_path}")
+    else:
+        print(f"Error: PDF file not found at {file_path}")
