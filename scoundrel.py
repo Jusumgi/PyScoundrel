@@ -52,7 +52,7 @@ def playGame(deck):
                 print("HEALTH: ",player["health"])
                 print("WEAPON: ",player["weapon"])
                 print("DURABILITY: ",player['durability'])
-                print("CARDS LEFT: ",len(deck.cards))
+                print("ENEMIES LEFT: ",enemies)
                 print(f"{'You are exhausted.' if player['fleeUse']<2 else 'You feel like you could out run them.'}")
                 print("a - Attack | w - Wield | p - Use Potion | f - Flee")
                 # try:
@@ -76,7 +76,7 @@ def playGame(deck):
                                 foundEnemies['room_position'].append(index)
                         if foundEnemy:
                             print_cards_horizontal(foundEnemies['available'])
-                            print("Select an enemy by typing it's value/rank")
+                            print("Select an enemy by typing it's value/rank or press c to cancel")
                             enemyChoice = lowerisUpper(getchit())
                             if enemyChoice == 'C':
                                 break
@@ -258,50 +258,6 @@ def lowerisUpper(input):
         return input.upper()
     else:
         return input
-# def findCards(option, room):
-#     foundCard = False
-#     isEnemy = False
-#     foundCards = {
-#     'available': [],
-#     'value': [],
-#     'room_position': [],
-#     'cardsuit': None,
-#     'cardtype': None
-#     }
-#     match option:
-#         case 'Weapon':
-#             foundCards['cardsuit'] = 'Diamonds'
-#             foundCards['cardtype'] = 'weapon'
-#         case 'Attack':
-#             foundCards['cardtype'] = 'enemy'
-#         case 'Potion':
-#             foundCards['cardsuit'] = 'Hearts'
-#             foundCards['cardtype'] = 'potion'
-#     for index, card in enumerate(room.cards):
-#             if card.suit <= 1:
-#                 isEnemy = True
-#             if card.suit_name == foundCards['cardsuit'] or isEnemy:
-#                     foundCard = True
-#                     foundCards["available"].append(card)
-#                     foundCards["value"].append(card.rank)
-#                     foundCards['room_position'].append(index)
-#     return foundCard, foundCards
-            # if foundCard:
-            #     print_cards_horizontal(foundCards['available'])
-            #     print(f"Select a weapon by typing it's rank")
-            #     while True:
-            #         weaponChoice = int(input())
-            #         if isinstance(weaponChoice, int):
-            #             if weaponChoice in foundCards['value']:
-            #                 print('passed')
-            #                 selectedWeapon = foundCards["value"].index(weaponChoice)
-            #                 player["weapon"] = weaponChoice
-            #                 room.remove_card(foundCards["room_position"][selectedWeapon])
-            #                 break
-            #         else:
-            #             print('Please type a number (range 2-10)')
-            # if not foundCard:
-            #     print("No weapons available")
 
 def remove_cards_from_deck(deck, remove_list):
     """
@@ -323,7 +279,6 @@ def print_cards_horizontal(cards, spacing=3):
         spacing (int): Number of spaces between each card.
     """
     card_art = [card.img.splitlines() for card in cards]
-
     # In case the cards are different heights, normalize them
     max_height = max(len(art) for art in card_art)
     for art in card_art:
@@ -333,8 +288,6 @@ def print_cards_horizontal(cards, spacing=3):
     # Print row by row
     for i in range(max_height):
         print((" " * spacing).join(card[i] for card in card_art))
-
-# print_cards_horizontal(room, 4)
 
 def mainMenu():
     while True:
