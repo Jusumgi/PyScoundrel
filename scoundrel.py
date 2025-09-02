@@ -208,8 +208,10 @@ def playGame(deck):
                                 potionPosition = foundPotions["room_position"][selectedPotion]
                                 potionStrength = room.cards[potionPosition].value
                                 if potionChoice in foundPotions['value'] and player['potionUse'] > 0 :
-                                    print('Potion Strength: ',potionStrength)
                                     player["health"] = player['health'] + potionStrength
+                                    print(f"This potion heals for {potionStrength} health.")
+                                    print(f"Your health is now {player['health']}")
+                                    getchit()
                                     player['potionUse'] = 0
                                     room.remove_card(potionPosition)
                                     break
