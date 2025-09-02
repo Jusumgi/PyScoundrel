@@ -2,3 +2,4 @@
 /__pycache__
 /venv
 /custom/playingcardsscoundrel/__pycache__/*
+/custom/playingcardsscoundrel/__init__.py
