@@ -139,6 +139,8 @@ def playGame(deck):
                                                 print(f"Durability: {player['durability']}")
                                                 getchit()
                                                 break
+                                            else:
+                                                break
                                         
                                         if enemyStrength == 1:
                                             damage = 14 - weapon
@@ -150,12 +152,11 @@ def playGame(deck):
                                         player['health'] = player['health'] - damage
                                         room.remove_card(enemyPosition)
                                         print(f"Player takes {damage} damage")
-                                        getchit()
                                         break
                                     except:
                                         print("Your weapon would break from this attack.")
                                         input()
-                                        break
+                                        
                                 case 'b':
                                     weapon = 0
                                     if enemyStrength == 1:
