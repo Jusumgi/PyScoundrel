@@ -3,4 +3,6 @@
 /venv
 custom/playingcardsscoundrel/__pycache__
 scoundrelpy/
-
+dist/
+build/
+scoundrel.spec
