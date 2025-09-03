@@ -92,6 +92,7 @@ def playGame(deck):
                         if foundEnemy:
                             clear_screen()
                             print(f"{Fore.RED}❤ {player['health']}{Fore.RED}❤ {Style.RESET_ALL}| {Fore.YELLOW}⚔ {player['weapon']}{Style.RESET_ALL}:{Fore.CYAN}{player['durability']} ⚔ {Style.RESET_ALL}| {enemies} enemies left")
+                            print("Attacking")
                             print_cards_horizontal(foundEnemies['available'])
                             print(Style.RESET_ALL)
                             print("Select an enemy by typing it's value/rank or press c to cancel")
@@ -152,6 +153,8 @@ def playGame(deck):
                                             player['health'] = player['health'] - damage
                                             room.remove_card(enemyPosition)
                                             print(f"Player takes {damage} damage")
+                                            print(f"Health: {player['health']}")
+                                            input()
                                             break
                                         except:
                                             print("Your weapon would break from this attack.")
@@ -168,7 +171,9 @@ def playGame(deck):
                                             damage = 0
                                         player['health'] = player['health'] - damage
                                         room.remove_card(enemyPosition)
-                                        print(f"Player takes {damage} damage")
+                                        print(f"Scoundrel takes {damage} damage")
+                                        print(f"Health: {player['health']}")
+                                        input()
                                         break
                                     case 'c':
                                         break
@@ -193,6 +198,7 @@ def playGame(deck):
                         if foundWeapon:
                             clear_screen()
                             print(f"{Fore.RED}❤ {player['health']}{Fore.RED}❤ {Style.RESET_ALL}| {Fore.YELLOW}⚔ {player['weapon']}{Style.RESET_ALL}:{Fore.CYAN}{player['durability']} ⚔ {Style.RESET_ALL}| {enemies} enemies left")
+                            print("Wield a weapon")
                             print_cards_horizontal(foundWeapons['available'])
                             print(Style.RESET_ALL)
                             print("Select a weapon by typing it's rank or enter c to cancel")
@@ -231,10 +237,11 @@ def playGame(deck):
                         if foundPotion:
                             clear_screen()
                             print(f"{Fore.RED}❤ {player['health']}{Fore.RED}❤ {Style.RESET_ALL}| {Fore.YELLOW}⚔ {player['weapon']}{Style.RESET_ALL}:{Fore.CYAN}{player['durability']} ⚔ {Style.RESET_ALL}| {enemies} enemies left")
+                            print("Drink a potion")
                             print_cards_horizontal(foundPotions['available'])
                             print(Style.RESET_ALL)
                             if player['potionUse'] == 0:
-                                print("You can drink another potion, but it will have no effect.")
+                                print("\033[4mYou can drink another potion, but it will have no effect.\033[0m")
                             print("Select a potion by typing it's rank or enter c to cancel")
                             while True:
                                 try:
