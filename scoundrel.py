@@ -303,7 +303,6 @@ def lowerisUpper(input):
         return input.upper()
     else:
         return input
-
 def remove_cards_from_deck(deck, remove_list):
     """
     Removes cards from deck that match strings in remove_list.
@@ -327,15 +326,15 @@ def print_cards_horizontal(cards, spacing=3):
     for card in cards:
         lines = card.img.splitlines()
         
-        # Apply red foreground and white background for suits >= 3 (e.g., Hearts)
+        # Apply red font for hearts and diamonds
         if card.suit >= 2:
             colored_lines = [Fore.RED + line for line in lines]
-        # Apply black foreground and white background for other suits
+        # Apply white font for clubs and spades
         else:
             colored_lines = [Fore.WHITE + line for line in lines]
             
         colored_card_art.append(colored_lines)
-        
+    # Ensures all cards end up being the same height based on the highest height
     max_height = max(len(art) for art in colored_card_art)
     for art in colored_card_art:
         while len(art) < max_height:
