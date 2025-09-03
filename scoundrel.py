@@ -18,13 +18,17 @@ def playGame(deck):
         'durability': 14,
         'potionUse': 1,
         'fleeUse': 2,
-        'hasFled': False
+        'hasFled': False,
+        'undead': False,
+        'quitGame': False
     }
     
     room = deck.draw_n(4)
     
     while True:
         # try:
+            if player['quitGame']:
+                break
             enemies = 0 # Enemy counter is tracked to determine when the game is over (as a win condition). Will have to change this when Scoring is implemented
             for card in room.cards:
                 if card.suit <= 1:
@@ -32,11 +36,24 @@ def playGame(deck):
             for card in deck.cards:
                 if card.suit <= 1:
                     enemies = enemies+1
+            if player['health'] <= 0 and player['undead'] == False:
+                print(f"Alas, you have fallen in battle.")
+                print("Continue as an undead? y/n" ) #placeholder/option to keep playing to see if you can come back to positive HP
+                deathChoice = lowerisUpper(input())
+                if deathChoice == 'Y':
+                    player['undead'] = True
+                    print("Resurrecting as an undead.")
+                else:
+                    break
             if player['hasFled'] == True: # This is to ensure that a full room is drawn after a Flee is used.
                 player['hasFled'] = False
                 drawRoom(deck, room)
                 player['potionUse'] = 1
             elif enemies == 0: # The only win condition
+                if player['undead']:
+                    print('With no more enemies to attack, you wander aimlessly until another scoundrel appears.')
+                    input()
+                    break
                 print("You have survived.")
                 print("Congratulations!")
                 input()
@@ -53,7 +70,7 @@ def playGame(deck):
                 print(f"{'You are exhausted.' if player['fleeUse']<2 else 'You feel like you could out run them.'}")
                 print_cards_horizontal(room)
                 print('What would you like to do?')
-                print("a - Attack | w - Wield | p - Use Potion | f - Flee")
+                print("a - Attack | w - Wield | p - Use Potion | f - Flee | q - Quit")
                 # try:
                 choice = getchit()
                 match choice:
@@ -73,61 +90,56 @@ def playGame(deck):
                                 foundEnemies['suit'].append(str(card.suit_name)[0])
                                 foundEnemies['room_position'].append(index)
                         if foundEnemy:
+                            clear_screen()
+                            print(f"{Fore.RED}❤ {player['health']}{Fore.RED}❤ {Style.RESET_ALL}| {Fore.YELLOW}⚔ {player['weapon']}{Style.RESET_ALL}:{Fore.CYAN}{player['durability']} ⚔ {Style.RESET_ALL}| {enemies} enemies left")
                             print_cards_horizontal(foundEnemies['available'])
                             print(Style.RESET_ALL)
                             print("Select an enemy by typing it's value/rank or press c to cancel")
-                            enemyChoice = lowerisUpper(getchit())
-                            if enemyChoice == 'C':
-                                break
-                            selectedEnemy = foundEnemies["value"].index(enemyChoice)
-                            enemyPosition = foundEnemies["room_position"][selectedEnemy]
-                            enemyStrength = room.cards[enemyPosition].value
-                            if enemyStrength == 1:
-                                enemyStrength = 14
-                            print(f"Your weapon strength is {player['weapon']}")
-                            print('The enemy strength is ',enemyStrength)
-                            print(f"The weapon durability is {player['durability']}")
-                            print('Use (w)eapon or (b)are hands?')
-                            print('Press c to cancel this action')
-                            while True:
-                                weapon = getchit()
-                                match weapon:
-                                    case 'w':
-                                        try: 
-                                            while True:
-                                                if player['weapon'] == 0:
-                                                    print("You don't have a weapon, so you throw hands.")
-                                                    weapon = int(player['weapon'])
-                                                    break
-                                                elif player['firststrike']:
-                                                    player['durability'] = enemyStrength
-                                                    player['firststrike'] = False
-                                                    weapon = int(player['weapon'])
-                                                    break
-                                                elif enemyStrength < player['durability'] :
-                                                    weapon = int(player['weapon'])
-                                                    player['durability'] = enemyStrength
-                                                    break
-                                                else:
-                                                    break
-                                            
-                                            if enemyStrength == 1:
-                                                damage = 14 - weapon
-                                                player['health'] = player['health'] - damage
-                                            else:
-                                                damage = enemyStrength - weapon
-                                            if damage <= 0:
-                                                damage = 0
-                                            player['health'] = player['health'] - damage
-                                            room.remove_card(enemyPosition)
-                                            print(f"Player takes {damage} damage")
-                                            break
-                                        except:
-                                            print("Your weapon would break from this attack.")
-                                            input()
-                                            break
-                                    case 'b':
-                                        weapon = 0
+                        while True:
+                            try:
+                                    enemyChoice = lowerisUpper(getchit())
+                                    if enemyChoice == 'C':
+                                        break
+                                    selectedEnemy = foundEnemies["value"].index(enemyChoice)
+                                    enemyPosition = foundEnemies["room_position"][selectedEnemy]
+                                    enemyStrength = room.cards[enemyPosition].value
+                                    break
+                            except:
+                                print("Invalid selection")
+                        if enemyStrength == 1:
+                            enemyStrength = 14
+                        print(f"Your weapon strength is {player['weapon']}")
+                        print('The enemy strength is ',enemyStrength)
+                        print(f"The weapon durability is {player['durability']}")
+                        print('Use (w)eapon or (b)are hands?')
+                        print('Press c to cancel this action')
+                        while True:
+                            weapon = getchit()
+                            match weapon:
+                                case 'w':
+                                    try: 
+                                        while True:
+                                            if player['weapon'] == 0:
+                                                print("You don't have a weapon, so you throw hands.")
+                                                getchit()
+                                                weapon = int(player['weapon'])
+                                                break
+                                            elif player['firststrike']:
+                                                player['durability'] = enemyStrength
+                                                player['firststrike'] = False
+                                                print("Your weapon has been damaged")
+                                                print(f"Durability: {player['durability']}")
+                                                getchit()
+                                                weapon = int(player['weapon'])
+                                                break
+                                            elif enemyStrength < player['durability'] :
+                                                player['durability'] = enemyStrength
+                                                weapon = int(player['weapon'])
+                                                print("Your weapon has been damaged")
+                                                print(f"Durability: {player['durability']}")
+                                                getchit()
+                                                break
+                                        
                                         if enemyStrength == 1:
                                             damage = 14 - weapon
                                             player['health'] = player['health'] - damage
@@ -138,9 +150,27 @@ def playGame(deck):
                                         player['health'] = player['health'] - damage
                                         room.remove_card(enemyPosition)
                                         print(f"Player takes {damage} damage")
+                                        getchit()
                                         break
-                                    case 'c':
+                                    except:
+                                        print("Your weapon would break from this attack.")
+                                        input()
                                         break
+                                case 'b':
+                                    weapon = 0
+                                    if enemyStrength == 1:
+                                        damage = 14 - weapon
+                                        player['health'] = player['health'] - damage
+                                    else:
+                                        damage = enemyStrength - weapon
+                                    if damage <= 0:
+                                        damage = 0
+                                    player['health'] = player['health'] - damage
+                                    room.remove_card(enemyPosition)
+                                    print(f"Player takes {damage} damage")
+                                    break
+                                case 'c':
+                                    break
                             break
                         if not foundEnemy:
                             print("No Enemies")
@@ -160,6 +190,8 @@ def playGame(deck):
                                 foundWeapons["value"].append(str(card.rank))
                                 foundWeapons['room_position'].append(index)
                         if foundWeapon:
+                            clear_screen()
+                            print(f"{Fore.RED}❤ {player['health']}{Fore.RED}❤ {Style.RESET_ALL}| {Fore.YELLOW}⚔ {player['weapon']}{Style.RESET_ALL}:{Fore.CYAN}{player['durability']} ⚔ {Style.RESET_ALL}| {enemies} enemies left")
                             print_cards_horizontal(foundWeapons['available'])
                             print(Style.RESET_ALL)
                             print("Select a weapon by typing it's rank or enter c to cancel")
@@ -196,6 +228,8 @@ def playGame(deck):
                                 foundPotions["value"].append(str(card.rank))
                                 foundPotions['room_position'].append(index)
                         if foundPotion:
+                            clear_screen()
+                            print(f"{Fore.RED}❤ {player['health']}{Fore.RED}❤ {Style.RESET_ALL}| {Fore.YELLOW}⚔ {player['weapon']}{Style.RESET_ALL}:{Fore.CYAN}{player['durability']} ⚔ {Style.RESET_ALL}| {enemies} enemies left")
                             print_cards_horizontal(foundPotions['available'])
                             print(Style.RESET_ALL)
                             if player['potionUse'] == 0:
@@ -239,10 +273,13 @@ def playGame(deck):
                                 deck.cards.insert(0, card)
                             room.cards.clear()
                             break
-                # except:
-                #     break            
+                    case 'q':
+                        print("Are you sure you want to quit? y/n")
+                        quitChoice = lowerisUpper(getchit())
+                        if quitChoice == "Y":
+                            player['quitGame'] = True
+                        break
         # except:
-        #     print("End of Deck")
         #     break
     mainMenu()
 def drawRoom(deck, room):
