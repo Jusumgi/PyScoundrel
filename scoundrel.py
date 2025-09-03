@@ -104,16 +104,18 @@ def playGame(deck):
                                         selectedEnemy = foundEnemies["value"].index(enemyChoice)
                                         enemyPosition = foundEnemies["room_position"][selectedEnemy]
                                         enemyStrength = room.cards[enemyPosition].value
+                                        if enemyStrength == 1:
+                                            enemyStrength = 14
+                                        print(f"Your weapon strength is {player['weapon']}")
+                                        print('The enemy strength is ',enemyStrength)
+                                        print(f"The weapon durability is {player['durability']}")
+                                        print('Use (w)eapon or (b)are hands?')
+                                        print('Press c to cancel this action')
                                         break
                                 except:
                                     print("Invalid selection")
-                            if enemyStrength == 1:
-                                enemyStrength = 14
-                            print(f"Your weapon strength is {player['weapon']}")
-                            print('The enemy strength is ',enemyStrength)
-                            print(f"The weapon durability is {player['durability']}")
-                            print('Use (w)eapon or (b)are hands?')
-                            print('Press c to cancel this action')
+                            if enemyChoice == 'C':
+                                break
                             while True:
                                 weapon = getchit()
                                 match weapon:
