@@ -1,5 +1,5 @@
 from custom.playingcardsscoundrel import Deck
-from colorama import Fore, Back, Style
+from colorama import Fore, Style
 from tools import *
 
 def newGame():
