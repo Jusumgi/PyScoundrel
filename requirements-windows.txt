@@ -1,0 +1,2 @@
+﻿colorama==0.4.6
+simple-ascii-cards==0.1
