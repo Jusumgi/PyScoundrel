@@ -306,12 +306,6 @@ def drawRoom(deck, room):
     print(room.cards)
     return room
 
-# Converts inputs to uppercase, typically using this for single-character inputs.
-def lowerisUpper(input):
-    if input.lower() == input:
-        return input.upper()
-    else:
-        return input
 def remove_cards_from_deck(deck, remove_list):
     """
     Removes cards from deck that match strings in remove_list.

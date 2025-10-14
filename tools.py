@@ -28,3 +28,9 @@ def open_pdf(file_path):
         print(f"Opened PDF: {file_path}")
     else:
         print(f"Error: PDF file not found at {file_path}")
+def lowerisUpper(input):
+# Converts inputs to uppercase, typically using this for single-character inputs.
+    if input.lower() == input:
+        return input.upper()
+    else:
+        return input
