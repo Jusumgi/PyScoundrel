@@ -348,7 +348,8 @@ def remove_cards_from_deck(deck, remove_list):
     Removes cards from deck that match strings in remove_list.
     Each string should look like 'Queen of Diamonds'.
     """
-    # Keep only cards NOT in remove_list
+    # Keep only cards NOT in remove_list, using list comprehension. The [card ...] is added to a new list if card.name condition returns true.
+    # After list comprehension, the new list overwrites deck by returning this new deck with cards removed.
     deck.cards = [card for card in deck.cards if card.name not in remove_list]
     return deck
 
