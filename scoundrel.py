@@ -365,7 +365,7 @@ def print_cards_horizontal(cards, spacing=3):
     colored_card_art = []
     for card in cards:
 
-        # Takes a multi-line string (card.img) and split it in to a LIST of individual lines so that they may be colored. May not be necessary to apply color.
+        # Takes a multi-line string (card.img) and split it in to a LIST of individual lines so that they may be colored and re-joined to print horizontally.
         # This is so we work with strings rather than working directly with the card object.
         lines = card.img.splitlines() 
         
