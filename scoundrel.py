@@ -89,6 +89,7 @@ def playGame(deck):
                 print("a - Attack | w - Wield | p - Use Potion | f - Flee | q - Quit")
                 choice = getchit()
                 match choice:
+
                     # Attack
                     case 'a':
                         foundEnemy = False
@@ -212,7 +213,9 @@ def playGame(deck):
                         if not foundEnemy:
                             print("No Enemies")
                             getchit()
-                        break                
+                        break   
+
+                    # Wield Weapon         
                     case 'w':
                         foundWeapon = False
                         foundWeapons = {
@@ -251,6 +254,8 @@ def playGame(deck):
                             print("No weapons available")
                             getchit()
                         break
+
+                    # Use Potion
                     case 'p':
                         foundPotion = False
                         foundPotions = {
@@ -301,6 +306,8 @@ def playGame(deck):
                             getchit()
                             
                         break
+
+                    # Flee Room
                     case 'f':
                         if player['fleeUse'] < 2:
                             print("You are exhausted and cannot flee.")
@@ -315,15 +322,16 @@ def playGame(deck):
                                 deck.cards.insert(0, card)
                             room.cards.clear()
                             break
+
+                    # Quit Game
                     case 'q':
                         print("Are you sure you want to quit? y/n")
                         quitChoice = lowerisUpper(getchit())
                         if quitChoice == "Y":
                             player['quitGame'] = True
                         break
-        # except:
-        #     break
-    mainMenu()
+
+
 def drawRoom(deck, room):
     while len(room.cards) < 4:
         try:
@@ -356,7 +364,10 @@ def print_cards_horizontal(cards, spacing=3):
     # Create colored card art based on the suit
     colored_card_art = []
     for card in cards:
-        lines = card.img.splitlines()
+
+        # Takes a multi-line string (card.img) and split it in to a LIST of individual lines so that they may be colored. May not be necessary to apply color.
+        # This is so we work with strings rather than working directly with the card object.
+        lines = card.img.splitlines() 
         
         # Apply red font for hearts and diamonds
         if card.suit >= 2:
@@ -364,18 +375,12 @@ def print_cards_horizontal(cards, spacing=3):
         # Apply white font for clubs and spades
         else:
             colored_lines = [Fore.WHITE + line for line in lines]
-            
+        # Becomes a list of lists, each member of the list is a card deconstructed into it's colored lines.
         colored_card_art.append(colored_lines)
-    # Ensures all cards end up being the same height based on the highest height
-    max_height = max(len(art) for art in colored_card_art)
-    for art in colored_card_art:
-        while len(art) < max_height:
-            # Padding for shorter cards must also have a background color
-            padding_line = Fore.BLACK + " " * len(art[0])
-            art.append(padding_line)
 
-    # Print row by row
-    for i in range(max_height):
+    # Print each card's lines by their index, by joining them. Join all card's 0 line, then 1 line, etc.
+    # The playingcards module by default always prints 7 lines to create a card.
+    for i in range(7):
         # Join the corresponding line from each colored card art
         print((" " * spacing).join(art[i] for art in colored_card_art))
     print(Style.RESET_ALL)
