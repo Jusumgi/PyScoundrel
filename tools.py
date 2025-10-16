@@ -4,6 +4,9 @@ import webbrowser
 
 system = platform.system()
 def getchit():
+    """
+    Allows for character input for faster UI experience, no matter which platform the script is run on.
+    """
     if system == "Windows":
         import msvcrt
         byte_input = msvcrt.getch()
@@ -15,6 +18,9 @@ def getchit():
     else:
         print("Operating System not supported")
 def clear_screen():
+    """
+    Allows for clear screen to occur no matter which platform the script is run on.
+    """
     if system == "Windows":
         os.system('cls')
     elif system == "Linux" or system == "Darwin":
@@ -30,8 +36,10 @@ def open_pdf(file_path):
         print(f"Error: PDF file not found at {file_path}")
         
 def lowerisUpper(input):
-# Converts inputs to uppercase, typically using this for single-character inputs.
-# You may ask "Why is this needed?"; a mystery to be certain.
+    """
+    Converts inputs to uppercase, typically using this for single-character inputs.
+    You may ask "Why is this needed?"; a mystery to be certain.
+    """
     if input.lower() == input:
         return input.upper()
     else:

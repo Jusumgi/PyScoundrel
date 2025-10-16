@@ -3,7 +3,7 @@ from colorama import Fore, Style
 from tools import *
 
 def newGame():
-    # Generates new deck, removes cards for normal-mode
+    """Generates new deck, removes cards for normal-mode"""
     freshdeck = Deck() # generate standard 52-card deck
     remove_cards_normal = ["Ace of Hearts", "Ace of Diamonds", "King of Hearts", "King of Diamonds", "Queen of Hearts", "Queen of Diamonds", "Jack of Hearts", "Jack of Diamonds"]
     deck = remove_cards_from_deck(freshdeck, remove_cards_normal)
@@ -11,6 +11,7 @@ def newGame():
     return deck
 
 def playGame(deck):
+    """ Game plays until enemies are 0 or player ends the game"""
     player = {
         'health': 20,
         'weapon': 0,
@@ -333,6 +334,10 @@ def playGame(deck):
 
 
 def drawRoom(deck, room):
+    """
+    Draws cards from Deck and appends the drawn cards to Room list. 
+    """
+
     while len(room.cards) < 4:
         try:
             nextroom = deck.draw_card()
