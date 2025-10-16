@@ -94,7 +94,6 @@ def playGame(deck):
 
                     # Attack
                     case 'a':
-                        foundEnemy = False
                         # foundEnemies = {
                         #     'available': [],
                         #     'value': [],
@@ -214,26 +213,28 @@ def playGame(deck):
                                     case 'c':
                                         break
                                 break
-                        if not findClubs[0] or not findSpades[0]:
+                        else:
                             print("No Enemies")
                             getchit()
                         break   
 
                     # Wield Weapon         
                     case 'w':
-                        foundWeapon = False
-                        foundWeapons = {
-                            'available': [],
-                            'value': [],
-                            'room_position': []
-                        }
-                        for index, card in enumerate(room.cards):
-                            if card.suit_name == 'Diamonds':
-                                foundWeapon = True
-                                foundWeapons["available"].append(card)
-                                foundWeapons["value"].append(str(card.rank))
-                                foundWeapons['room_position'].append(index)
-                        if foundWeapon:
+                        # foundWeapon = False
+                        # foundWeapons = {
+                        #     'available': [],
+                        #     'value': [],
+                        #     'room_position': []
+                        # }
+                        # for index, card in enumerate(room.cards):
+                        #     if card.suit_name == 'Diamonds':
+                        #         foundWeapon = True
+                        #         foundWeapons["available"].append(card)
+                        #         foundWeapons["value"].append(str(card.rank))
+                        #         foundWeapons['room_position'].append(index)
+                        findDiamonds = find_cards("Diamonds", room)
+                        foundWeapons = findDiamonds[1]
+                        if findDiamonds[0]:
                             clear_screen()
                             print(f"{Fore.RED}❤ {player['health']}{Fore.RED}❤ {Style.RESET_ALL}| {Fore.YELLOW}⚔ {player['weapon']}{Style.RESET_ALL}:{Fore.CYAN}{player['durability']} ⚔ {Style.RESET_ALL}| {enemies} enemies left")
                             print("Wield a weapon")
@@ -261,20 +262,22 @@ def playGame(deck):
 
                     # Use Potion
                     case 'p':
-                        foundPotion = False
-                        foundPotions = {
-                            'available': [],
-                            'value': [],
-                            'room_position': []
-                        }
+                        # foundPotion = False
+                        # foundPotions = {
+                        #     'available': [],
+                        #     'value': [],
+                        #     'room_position': []
+                        # }
                         
-                        for index, card in enumerate(room.cards):
-                            if card.suit_name == 'Hearts':
-                                foundPotion = True
-                                foundPotions["available"].append(card)
-                                foundPotions["value"].append(str(card.rank))
-                                foundPotions['room_position'].append(index)
-                        if foundPotion:
+                        # for index, card in enumerate(room.cards):
+                        #     if card.suit_name == 'Hearts':
+                        #         foundPotion = True
+                        #         foundPotions["available"].append(card)
+                        #         foundPotions["value"].append(str(card.rank))
+                        #         foundPotions['room_position'].append(index)
+                        findHearts = find_cards("Hearts", room)
+                        foundPotions = findHearts[1]
+                        if findHearts[0]:
                             clear_screen()
                             print(f"{Fore.RED}❤ {player['health']}{Fore.RED}❤ {Style.RESET_ALL}| {Fore.YELLOW}⚔ {player['weapon']}{Style.RESET_ALL}:{Fore.CYAN}{player['durability']} ⚔ {Style.RESET_ALL}| {enemies} enemies left")
                             print("Drink a potion")
