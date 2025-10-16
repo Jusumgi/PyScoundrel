@@ -1,6 +1,7 @@
 from custom.playingcardsscoundrel import Deck
 from colorama import Fore, Style
 from tools import *
+from card_tools import *
 
 def newGame():
     """Generates new deck, removes cards for normal-mode"""
@@ -94,23 +95,25 @@ def playGame(deck):
                     # Attack
                     case 'a':
                         foundEnemy = False
-                        foundEnemies = {
-                            'available': [],
-                            'value': [],
-                            'suit': [],
-                            'room_position': []
-                        }
-                        # "Renders" the room in search of enemies
-                        for index, card in enumerate(room.cards):
-                            if card.suit_name == 'Clubs' or card.suit_name == 'Spades':
-                                foundEnemy = True
-                                foundEnemies["available"].append(card)
-                                foundEnemies["value"].append(str(card.rank)[0])
-                                foundEnemies['suit'].append(str(card.suit_name)[0])
-                                foundEnemies['room_position'].append(index)
-
+                        # foundEnemies = {
+                        #     'available': [],
+                        #     'value': [],
+                        #     'suit': [],
+                        #     'room_position': []
+                        # }
+                        # # "Renders" the room in search of enemies
+                        # for index, card in enumerate(room.cards):
+                        #     if card.suit_name == 'Clubs' or card.suit_name == 'Spades':
+                        #         foundEnemy = True
+                        #         foundEnemies["available"].append(card)
+                        #         foundEnemies["value"].append(str(card.rank)[0])
+                        #         foundEnemies['suit'].append(str(card.suit_name)[0])
+                        #         foundEnemies['room_position'].append(index)
+                        findClubs = find_cards("Clubs", room)
+                        findSpades = find_cards("Spades", room)
+                        foundEnemies = {key: findClubs[1][key] + findSpades[1][key] for key in findClubs[1]}
                         # Enemy must be present for the condition to pass.
-                        if foundEnemy:
+                        if findClubs[0] or findSpades[0]:
                             clear_screen()
                             print(f"{Fore.RED}❤ {player['health']}{Fore.RED}❤ {Style.RESET_ALL}| {Fore.YELLOW}⚔ {player['weapon']}{Style.RESET_ALL}:{Fore.CYAN}{player['durability']} ⚔ {Style.RESET_ALL}| {enemies} enemies left")
                             print("Attacking")
@@ -211,7 +214,7 @@ def playGame(deck):
                                     case 'c':
                                         break
                                 break
-                        if not foundEnemy:
+                        if not findClubs[0] or not findSpades[0]:
                             print("No Enemies")
                             getchit()
                         break   
