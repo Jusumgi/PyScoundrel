@@ -1,7 +1,7 @@
 How to Install/Run
 
 1. Have Python 3 installed
-    - For Linux, sudo apt-get install python3 python3-dev python3-venv
+    - For Linux, sudo apt-get install python3-full
     - For Windows, download and install from Python's website
 2. Create a virtual environment
     - python3 -m venv venv
