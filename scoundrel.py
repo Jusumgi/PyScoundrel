@@ -18,23 +18,20 @@ def playGame(deck):
     player = Game()
     room = deck.draw_n(4)
     
+    # Check the room and if the card suit is 0 or 1 (Clubs or Spades) then add 1 to enemies counter.
+    for card in room.cards: 
+        if card.suit <= 1:
+            player.enemies = player.enemies+1
+
+    # Check the deck and if the card suit is 0 or 1 (Clubs or Spades) then add 1 to enemies counter.
+    for card in deck.cards: 
+        if card.suit <= 1:
+            player.enemies = player.enemies+1
     while True:
             # if player has pressed q while game is in session, exit the game session.
             if player.quit_game: 
                 break
 
-            # Enemy counter is tracked to determine when the game is over (as a win condition). Will have to change this when Scoring is implemented
-            player.enemies = 0 
-
-            # Check the room and if the card suit is 0 or 1 (Clubs or Spades) then add 1 to enemies counter.
-            for card in room.cards: 
-                if card.suit <= 1:
-                    player.enemies = player.enemies+1
-
-            # Check the deck and if the card suit is 0 or 1 (Clubs or Spades) then add 1 to enemies counter.
-            for card in deck.cards: 
-                if card.suit <= 1:
-                    player.enemies = player.enemies+1
 
             # When player's health is 0 or less, ask if player wants to continue as an Undead or end the game.
             if player.health <= 0 and player.undead == False:
@@ -164,6 +161,7 @@ def playGame(deck):
                                                 damage = 0
                                             player.health = player.health - damage
                                             room.remove_card(enemyPosition)
+                                            player.enemies = player.enemies-1
                                             print(f"Player takes {damage} damage")
                                             print(f"Health: {player.health}")
                                             input()
@@ -183,6 +181,7 @@ def playGame(deck):
                                             damage = 0
                                         player.health = player.health - damage
                                         room.remove_card(enemyPosition)
+                                        player.enemies = player.enemies-1
                                         print(f"Scoundrel takes {damage} damage")
                                         print(f"Health: {player.health}")
                                         input()
@@ -300,8 +299,7 @@ def mainMenu():
         response = getchit()
         match response:
             case '1':
-                game = newGame()
-                playGame(game)
+                playGame(newGame())
             case '2':
                 clear_screen()
                 print("Scoundrel is a single-player Rogue-like card game by Zach Gage and Kurt Bieg")
