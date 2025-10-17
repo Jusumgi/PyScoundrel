@@ -2,6 +2,8 @@ from custom.playingcardsscoundrel import Deck
 from colorama import Fore, Style
 from tools import *
 from card_tools import *
+from Game import Game
+
 
 def newGame():
     """Generates new deck, removes cards for normal-mode"""
@@ -13,58 +15,47 @@ def newGame():
 
 def playGame(deck):
     """ Game plays until enemies are 0 or player ends the game"""
-    player = {
-        'health': 20,
-        'weapon': 0,
-        'firststrike': False,
-        'durability': 14,
-        'potionUse': 1,
-        'fleeUse': 2,
-        'hasFled': False,
-        'undead': False,
-        'quitGame': False
-    }
-    
+    player = Game()
     room = deck.draw_n(4)
     
     while True:
             # if player has pressed q while game is in session, exit the game session.
-            if player['quitGame']: 
+            if player.quit_game: 
                 break
 
             # Enemy counter is tracked to determine when the game is over (as a win condition). Will have to change this when Scoring is implemented
-            enemies = 0 
+            player.enemies = 0 
 
             # Check the room and if the card suit is 0 or 1 (Clubs or Spades) then add 1 to enemies counter.
             for card in room.cards: 
                 if card.suit <= 1:
-                    enemies = enemies+1
+                    player.enemies = player.enemies+1
 
             # Check the deck and if the card suit is 0 or 1 (Clubs or Spades) then add 1 to enemies counter.
             for card in deck.cards: 
                 if card.suit <= 1:
-                    enemies = enemies+1
+                    player.enemies = player.enemies+1
 
             # When player's health is 0 or less, ask if player wants to continue as an Undead or end the game.
-            if player['health'] <= 0 and player['undead'] == False:
+            if player.health <= 0 and player.undead == False:
                 print(f"Alas, you have fallen in battle.")
                 print("Continue as an undead? y/n" ) 
                 deathChoice = lowerisUpper(input())
                 if deathChoice == 'Y':
-                    player['undead'] = True
+                    player.undead = True
                     print("Resurrecting as an undead.")
                 else:
                     break
 
             # This is to ensure that a full room is drawn after a Flee is used.
-            if player['hasFled'] == True: 
-                player['hasFled'] = False
+            if player.has_fled == True: 
+                player.has_fled = False
                 drawRoom(deck, room)
-                player['potionUse'] = 1
+                player.potion_use = 1
 
             # WIN CONDITION
-            elif enemies == 0: 
-                if player['undead']:
+            elif player.enemies == 0: 
+                if player.undead:
                     print('With no more enemies to attack, you wander aimlessly until another scoundrel appears.')
                     input()
                     break
@@ -77,15 +68,16 @@ def playGame(deck):
             else:
                 if len(room.cards) == 1 and len(deck.cards) != 0: 
                     drawRoom(deck, room)
-                    player['potionUse'] = 1
-                    if player['fleeUse'] < 2:
-                        player['fleeUse'] = player['fleeUse']+1 # Flee cooldown
+                    player.potion_use = 1
+                    if player.flee_use < 2:
+                        player.flee_use = player.flee_use+1 # Flee cooldown
 
             # So long as there are enemies, we will continue the game.
-            while enemies >= 1:
+            while player.enemies >= 1:
                 clear_screen()
-                print(f"{Fore.RED}❤ {player['health']}{Fore.RED}❤ {Style.RESET_ALL}| {Fore.YELLOW}⚔ {player['weapon']}{Style.RESET_ALL}:{Fore.CYAN}{player['durability']} ⚔ {Style.RESET_ALL}| {enemies} enemies left")
-                print(f"{'You are exhausted.' if player['fleeUse']<2 else 'You feel like you could out run them.'}")
+                player.printUI()
+                # print(f"{Fore.RED}❤ {player.health}{Fore.RED}❤ {Style.RESET_ALL}| {Fore.YELLOW}⚔ {player.weapon}{Style.RESET_ALL}:{Fore.CYAN}{player.durability} ⚔ {Style.RESET_ALL}| {enemies} enemies left")
+                print(f"{'You are exhausted.' if player.flee_use<2 else 'You feel like you could out run them.'}")
                 print_cards_horizontal(room)
                 print('What would you like to do?')
                 print("a - Attack | w - Wield | p - Use Potion | f - Flee | q - Quit")
@@ -114,7 +106,8 @@ def playGame(deck):
                         # Enemy must be present for the condition to pass.
                         if findClubs[0] or findSpades[0]:
                             clear_screen()
-                            print(f"{Fore.RED}❤ {player['health']}{Fore.RED}❤ {Style.RESET_ALL}| {Fore.YELLOW}⚔ {player['weapon']}{Style.RESET_ALL}:{Fore.CYAN}{player['durability']} ⚔ {Style.RESET_ALL}| {enemies} enemies left")
+                            player.printUI()
+                            # print(f"{Fore.RED}❤ {player.health}{Fore.RED}❤ {Style.RESET_ALL}| {Fore.YELLOW}⚔ {player.weapon}{Style.RESET_ALL}:{Fore.CYAN}{player.durability} ⚔ {Style.RESET_ALL}| {enemies} enemies left")
                             print("Attacking")
                             print_cards_horizontal(foundEnemies['available'])
                             print(Style.RESET_ALL)
@@ -133,9 +126,9 @@ def playGame(deck):
                                     # Aces Low into Aces High
                                     if enemyStrength == 1:
                                         enemyStrength = 14
-                                    print(f"Your weapon strength is {player['weapon']}")
+                                    print(f"Your weapon strength is {player.weapon}")
                                     print('The enemy strength is ',enemyStrength)
-                                    print(f"The weapon durability is {player['durability']}")
+                                    print(f"The weapon durability is {player.durability}")
                                     print('Use (w)eapon or (b)are hands?')
                                     print('Press c to cancel this action')
                                     break
@@ -153,26 +146,26 @@ def playGame(deck):
                                     case 'w':
                                         try: 
                                             while True:
-                                                if player['weapon'] == 0:
+                                                if player.weapon == 0:
                                                     print("You don't have a weapon, so you throw hands.")
                                                     getchit()
-                                                    weapon = int(player['weapon'])
+                                                    weapon = int(player.weapon)
                                                     break
 
                                                 # With first strike, a weapon can strike any enemy without restriction.
-                                                elif player['firststrike']:
-                                                    player['durability'] = enemyStrength
-                                                    player['firststrike'] = False
+                                                elif player.first_strike:
+                                                    player.durability = enemyStrength
+                                                    player.first_strike = False
                                                     print("Your weapon has been damaged")
-                                                    print(f"Durability: {player['durability']}")
+                                                    print(f"Durability: {player.durability}")
                                                     getchit()
-                                                    weapon = int(player['weapon'])
+                                                    weapon = int(player.weapon)
                                                     break
-                                                elif enemyStrength < player['durability'] :
-                                                    player['durability'] = enemyStrength
-                                                    weapon = int(player['weapon'])
+                                                elif enemyStrength < player.durability :
+                                                    player.durability = enemyStrength
+                                                    weapon = int(player.weapon)
                                                     print("Your weapon has been damaged")
-                                                    print(f"Durability: {player['durability']}")
+                                                    print(f"Durability: {player.durability}")
                                                     getchit()
                                                     break
                                                 else:
@@ -180,15 +173,15 @@ def playGame(deck):
                                             # If enemy is an Ace, damage needs to be 14.
                                             if enemyStrength == 1:
                                                 damage = 14 - weapon
-                                                player['health'] = player['health'] - damage
+                                                player.health = player.health - damage
                                             else:
                                                 damage = enemyStrength - weapon
                                             if damage <= 0:
                                                 damage = 0
-                                            player['health'] = player['health'] - damage
+                                            player.health = player.health - damage
                                             room.remove_card(enemyPosition)
                                             print(f"Player takes {damage} damage")
-                                            print(f"Health: {player['health']}")
+                                            print(f"Health: {player.health}")
                                             input()
                                             break
                                         except:
@@ -199,15 +192,15 @@ def playGame(deck):
                                         weapon = 0
                                         if enemyStrength == 1:
                                             damage = 14 - weapon
-                                            player['health'] = player['health'] - damage
+                                            player.health = player.health - damage
                                         else:
                                             damage = enemyStrength - weapon
                                         if damage <= 0:
                                             damage = 0
-                                        player['health'] = player['health'] - damage
+                                        player.health = player.health - damage
                                         room.remove_card(enemyPosition)
                                         print(f"Scoundrel takes {damage} damage")
-                                        print(f"Health: {player['health']}")
+                                        print(f"Health: {player.health}")
                                         input()
                                         break
                                     case 'c':
@@ -236,7 +229,8 @@ def playGame(deck):
                         foundWeapons = findDiamonds[1]
                         if findDiamonds[0]:
                             clear_screen()
-                            print(f"{Fore.RED}❤ {player['health']}{Fore.RED}❤ {Style.RESET_ALL}| {Fore.YELLOW}⚔ {player['weapon']}{Style.RESET_ALL}:{Fore.CYAN}{player['durability']} ⚔ {Style.RESET_ALL}| {enemies} enemies left")
+                            player.printUI()
+                            # print(f"{Fore.RED}❤ {player.health}{Fore.RED}❤ {Style.RESET_ALL}| {Fore.YELLOW}⚔ {player.weapon}{Style.RESET_ALL}:{Fore.CYAN}{player.durability} ⚔ {Style.RESET_ALL}| {enemies} enemies left")
                             print("Wield a weapon")
                             print_cards_horizontal(foundWeapons['available'])
                             print(Style.RESET_ALL)
@@ -249,9 +243,9 @@ def playGame(deck):
                                     selectedWeapon = foundWeapons["value"].index(weaponChoice)
                                     weaponPosition = foundWeapons["room_position"][selectedWeapon]
                                     weaponStrength = room.cards[weaponPosition].value
-                                    player["weapon"] = weaponStrength
-                                    player["durability"] = 14
-                                    player['firststrike'] = True
+                                    player.weapon = weaponStrength
+                                    player.durability = 14
+                                    player.first_strike = True
                                     room.remove_card(weaponPosition)
                                     break
 
@@ -279,11 +273,12 @@ def playGame(deck):
                         foundPotions = findHearts[1]
                         if findHearts[0]:
                             clear_screen()
-                            print(f"{Fore.RED}❤ {player['health']}{Fore.RED}❤ {Style.RESET_ALL}| {Fore.YELLOW}⚔ {player['weapon']}{Style.RESET_ALL}:{Fore.CYAN}{player['durability']} ⚔ {Style.RESET_ALL}| {enemies} enemies left")
+                            player.printUI()
+                            # print(f"{Fore.RED}❤ {player.health}{Fore.RED}❤ {Style.RESET_ALL}| {Fore.YELLOW}⚔ {player.weapon}{Style.RESET_ALL}:{Fore.CYAN}{player.durability} ⚔ {Style.RESET_ALL}| {enemies} enemies left")
                             print("Drink a potion")
                             print_cards_horizontal(foundPotions['available'])
                             print(Style.RESET_ALL)
-                            if player['potionUse'] == 0:
+                            if player.potion_use == 0:
                                 print("\033[4mYou can drink another potion, but it will have no effect.\033[0m")
                             print("Select a potion by typing it's rank or enter c to cancel")
                             while True:
@@ -294,12 +289,12 @@ def playGame(deck):
                                     selectedPotion = foundPotions["value"].index(potionChoice)
                                     potionPosition = foundPotions["room_position"][selectedPotion]
                                     potionStrength = room.cards[potionPosition].value
-                                    if potionChoice in foundPotions['value'] and player['potionUse'] > 0 :
-                                        player["health"] = player['health'] + potionStrength
+                                    if potionChoice in foundPotions['value'] and player.potion_use > 0 :
+                                        player.health = player.health + potionStrength
                                         print(f"This potion heals for {potionStrength} health.")
-                                        print(f"Your health is now {player['health']}")
+                                        print(f"Your health is now {player.health}")
                                         getchit()
-                                        player['potionUse'] = 0
+                                        player.potion_use = 0
                                         room.remove_card(potionPosition)
                                         break
                                     else:
@@ -316,15 +311,14 @@ def playGame(deck):
 
                     # Flee Room
                     case 'f':
-                        if player['fleeUse'] < 2:
+                        if player.flee_use < 2:
                             print("You are exhausted and cannot flee.")
                             getchit()
                         else:
                             print("You have fled. All cards have been moved to the bottom of the deck.")
                             getchit()
-                            player['fleeUse'] = 0
-                            player['hasFled'] = True
-                            print(deck.cards)
+                            player.flee_use = 0
+                            player.has_fled = True
                             for card in room.cards:
                                 deck.cards.insert(0, card)
                             room.cards.clear()
@@ -335,7 +329,7 @@ def playGame(deck):
                         print("Are you sure you want to quit? y/n")
                         quitChoice = lowerisUpper(getchit())
                         if quitChoice == "Y":
-                            player['quitGame'] = True
+                            player.quit_game = True
                         break
 
 
