@@ -72,5 +72,6 @@ def print_cards_horizontal(cards, spacing=3):
     # The playingcards module by default always prints 7 lines to create a card.
     for i in range(7):
         # Join the corresponding line from each colored card art
-        print((" " * spacing).join(art[i] for art in colored_card_art))
+        finalprint = (" " * spacing).join(art[i] for art in colored_card_art)
+        print(finalprint)
     print(Style.RESET_ALL)
