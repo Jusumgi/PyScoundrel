@@ -1,5 +1,5 @@
 from custom.playingcardsscoundrel import Deck
-from colorama import Fore, Style
+from colorama import Style
 from tools import *
 from card_tools import *
 from Game import Game
@@ -76,7 +76,6 @@ def playGame(deck):
             while player.enemies >= 1:
                 clear_screen()
                 player.printUI()
-                # print(f"{Fore.RED}❤ {player.health}{Fore.RED}❤ {Style.RESET_ALL}| {Fore.YELLOW}⚔ {player.weapon}{Style.RESET_ALL}:{Fore.CYAN}{player.durability} ⚔ {Style.RESET_ALL}| {enemies} enemies left")
                 print(f"{'You are exhausted.' if player.flee_use<2 else 'You feel like you could out run them.'}")
                 print_cards_horizontal(room)
                 print('What would you like to do?')
@@ -86,20 +85,6 @@ def playGame(deck):
 
                     # Attack
                     case 'a':
-                        # foundEnemies = {
-                        #     'available': [],
-                        #     'value': [],
-                        #     'suit': [],
-                        #     'room_position': []
-                        # }
-                        # # "Renders" the room in search of enemies
-                        # for index, card in enumerate(room.cards):
-                        #     if card.suit_name == 'Clubs' or card.suit_name == 'Spades':
-                        #         foundEnemy = True
-                        #         foundEnemies["available"].append(card)
-                        #         foundEnemies["value"].append(str(card.rank)[0])
-                        #         foundEnemies['suit'].append(str(card.suit_name)[0])
-                        #         foundEnemies['room_position'].append(index)
                         findClubs = find_cards("Clubs", room)
                         findSpades = find_cards("Spades", room)
                         foundEnemies = {key: findClubs[1][key] + findSpades[1][key] for key in findClubs[1]}
@@ -107,7 +92,6 @@ def playGame(deck):
                         if findClubs[0] or findSpades[0]:
                             clear_screen()
                             player.printUI()
-                            # print(f"{Fore.RED}❤ {player.health}{Fore.RED}❤ {Style.RESET_ALL}| {Fore.YELLOW}⚔ {player.weapon}{Style.RESET_ALL}:{Fore.CYAN}{player.durability} ⚔ {Style.RESET_ALL}| {enemies} enemies left")
                             print("Attacking")
                             print_cards_horizontal(foundEnemies['available'])
                             print(Style.RESET_ALL)
@@ -213,24 +197,11 @@ def playGame(deck):
 
                     # Wield Weapon         
                     case 'w':
-                        # foundWeapon = False
-                        # foundWeapons = {
-                        #     'available': [],
-                        #     'value': [],
-                        #     'room_position': []
-                        # }
-                        # for index, card in enumerate(room.cards):
-                        #     if card.suit_name == 'Diamonds':
-                        #         foundWeapon = True
-                        #         foundWeapons["available"].append(card)
-                        #         foundWeapons["value"].append(str(card.rank))
-                        #         foundWeapons['room_position'].append(index)
                         findDiamonds = find_cards("Diamonds", room)
                         foundWeapons = findDiamonds[1]
                         if findDiamonds[0]:
                             clear_screen()
                             player.printUI()
-                            # print(f"{Fore.RED}❤ {player.health}{Fore.RED}❤ {Style.RESET_ALL}| {Fore.YELLOW}⚔ {player.weapon}{Style.RESET_ALL}:{Fore.CYAN}{player.durability} ⚔ {Style.RESET_ALL}| {enemies} enemies left")
                             print("Wield a weapon")
                             print_cards_horizontal(foundWeapons['available'])
                             print(Style.RESET_ALL)
@@ -256,25 +227,11 @@ def playGame(deck):
 
                     # Use Potion
                     case 'p':
-                        # foundPotion = False
-                        # foundPotions = {
-                        #     'available': [],
-                        #     'value': [],
-                        #     'room_position': []
-                        # }
-                        
-                        # for index, card in enumerate(room.cards):
-                        #     if card.suit_name == 'Hearts':
-                        #         foundPotion = True
-                        #         foundPotions["available"].append(card)
-                        #         foundPotions["value"].append(str(card.rank))
-                        #         foundPotions['room_position'].append(index)
                         findHearts = find_cards("Hearts", room)
                         foundPotions = findHearts[1]
                         if findHearts[0]:
                             clear_screen()
                             player.printUI()
-                            # print(f"{Fore.RED}❤ {player.health}{Fore.RED}❤ {Style.RESET_ALL}| {Fore.YELLOW}⚔ {player.weapon}{Style.RESET_ALL}:{Fore.CYAN}{player.durability} ⚔ {Style.RESET_ALL}| {enemies} enemies left")
                             print("Drink a potion")
                             print_cards_horizontal(foundPotions['available'])
                             print(Style.RESET_ALL)
