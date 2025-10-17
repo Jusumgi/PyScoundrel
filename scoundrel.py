@@ -151,12 +151,7 @@ def playGame(deck):
                                                     break
                                                 else:
                                                     break
-                                            # If enemy is an Ace, damage needs to be 14.
-                                            if enemyStrength == 1:
-                                                damage = 14 - weapon
-                                                player.health = player.health - damage
-                                            else:
-                                                damage = enemyStrength - weapon
+                                            damage = enemyStrength - weapon
                                             if damage <= 0:
                                                 damage = 0
                                             player.health = player.health - damage
@@ -172,11 +167,7 @@ def playGame(deck):
                                             
                                     case 'b':
                                         weapon = 0
-                                        if enemyStrength == 1:
-                                            damage = 14 - weapon
-                                            player.health = player.health - damage
-                                        else:
-                                            damage = enemyStrength - weapon
+                                        damage = enemyStrength - weapon
                                         if damage <= 0:
                                             damage = 0
                                         player.health = player.health - damage
