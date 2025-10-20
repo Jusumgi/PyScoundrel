@@ -15,3 +15,5 @@ class Game:
     
     def printUI(self):
         print(f"{Fore.RED}❤ {self.health}{Fore.RED}❤ {Style.RESET_ALL}| {Fore.YELLOW}⚔ {self.weapon}{Style.RESET_ALL}:{Fore.CYAN}{self.durability} ⚔ {Style.RESET_ALL}| {self.enemies} enemies left")
+    def quitGame(self):
+        pass
