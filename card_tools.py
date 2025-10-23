@@ -7,7 +7,7 @@ def find_cards(suit, room):
         'value': [],
         'room_position': []
     }
-    # "Renders" the room in search of enemies
+    # "Renders" the room in search of cards
     for index, card in enumerate(room.cards):
         if card.suit_name == suit:
             foundCard = True
