@@ -27,7 +27,7 @@ def mainMenu():
                 print("* After an enemy has been hit with a weapon, the player incurs Durability where the next enemy struck must be less than the strength/rank of the monster before it.")
                 print("* Potions can effectively be used once per room. Any other potions used in the same room have no effect and are wasted/discarded.")
                 pdfcall = getchit().upper()
-                if lowerisUpper(pdfcall) == 'H':
+                if pdfcall == 'H':
                     open_pdf('Scoundrel.pdf')
             case 'q':
                 break
