@@ -4,7 +4,7 @@ from tools import *
 from colorama import Fore, Style
 class Game:
     def __init__(self):
-        self.health = 20
+        self.health = 200
         self.weapon = 0
         self.first_strike = False
         self.durability = 14
@@ -19,8 +19,6 @@ class Game:
     
     def printUI(self):
         print(f"{Fore.RED}❤ {self.health}{Fore.RED}❤ {Style.RESET_ALL}| {Fore.YELLOW}⚔ {self.weapon}{Style.RESET_ALL}:{Fore.CYAN}{self.durability} ⚔ {Style.RESET_ALL}| {self.enemies} enemies left")
-    def quitGame(self):
-        pass
     def newGame(self):
         """Generates new deck, removes cards for normal-mode"""
         freshdeck = Deck() # generate standard 52-card deck
@@ -54,8 +52,11 @@ class Game:
                     deathChoice = input().upper()
                     if deathChoice == 'Y':
                         self.undead = True
+                        self.calculate_score(deck, room)
                         print("Resurrecting as an undead.")
                     else:
+                        self.undead = True
+                        self.calculate_score(deck, room)
                         break
 
                 # This is to ensure that a full room is drawn after a Flee is used.
@@ -72,6 +73,7 @@ class Game:
                         break
                     print("You have survived.")
                     print("Congratulations!")
+                    self.calculate_score(deck, room)
                     input()
                     break
 
@@ -114,8 +116,8 @@ class Game:
                                         enemyChoice = getchit().upper()
                                         if enemyChoice == 'C':
                                             break
-                                        selectedEnemy = foundEnemies["value"].index(enemyChoice)
-                                        enemyPosition = foundEnemies["room_position"][selectedEnemy]
+                                        selectedEnemy = foundEnemies['rank'].index(enemyChoice)
+                                        enemyPosition = foundEnemies['room_position'][selectedEnemy]
                                         enemyStrength = room.cards[enemyPosition].value
 
                                         # Aces Low into Aces High
@@ -201,7 +203,7 @@ class Game:
                             break   
 
                         # Wield Weapon         
-                        case 'w':
+                        case 'W':
                             findDiamonds = find_cards("Diamonds", room)
                             foundWeapons = findDiamonds[1]
                             if findDiamonds[0]:
@@ -215,9 +217,9 @@ class Game:
                                     weaponChoice = getchit().upper()
                                     if weaponChoice == 'C':
                                             break
-                                    if weaponChoice in foundWeapons['value']:
-                                        selectedWeapon = foundWeapons["value"].index(weaponChoice)
-                                        weaponPosition = foundWeapons["room_position"][selectedWeapon]
+                                    if weaponChoice in foundWeapons['rank']:
+                                        selectedWeapon = foundWeapons['rank'].index(weaponChoice)
+                                        weaponPosition = foundWeapons['room_position'][selectedWeapon]
                                         weaponStrength = room.cards[weaponPosition].value
                                         self.weapon = weaponStrength
                                         self.durability = 14
@@ -248,10 +250,10 @@ class Game:
                                         potionChoice = getchit().upper()
                                         if potionChoice == 'C':
                                             break
-                                        selectedPotion = foundPotions["value"].index(potionChoice)
+                                        selectedPotion = foundPotions["rank"].index(potionChoice)
                                         potionPosition = foundPotions["room_position"][selectedPotion]
                                         potionStrength = room.cards[potionPosition].value
-                                        if potionChoice in foundPotions['value'] and self.potion_use > 0 :
+                                        if potionChoice in foundPotions['rank'] and self.potion_use > 0 :
                                             self.health = self.health + potionStrength
                                             print(f"This potion heals for {potionStrength} health.")
                                             print(f"Your health is now {self.health}")
@@ -291,5 +293,36 @@ class Game:
                             print("Are you sure you want to quit? y/n")
                             quitChoice = getchit().upper()
                             if quitChoice == "Y":
+                                self.undead = True
                                 self.quit_game = True
                             break
+    def calculate_score(self, deck, room):
+        if self.undead:
+            find_room_clubs = find_cards("Clubs", room)
+            find_room_spades = find_cards("Spades", room)
+            find_deck_clubs = find_cards("Clubs", deck)
+            find_deck_spades = find_cards("Spades", deck)
+            found_enemies = {
+                key: find_room_clubs[1][key] + 
+                find_room_spades[1][key] + 
+                find_deck_clubs[1][key] + 
+                find_deck_spades[1][key] 
+                for key in find_room_clubs[1]
+                }
+            for enemy in found_enemies['value']:
+                if enemy == 1:
+                    enemy = 14
+                self.score = self.score - enemy
+            print(f"Final Score: {self.score}")
+            return self.score
+        else:
+            find_room_potions = find_cards("Hearts", room)
+            find_deck_potions = find_cards("Hearts", deck)
+            found_potions = {key: find_room_potions[1][key]+find_deck_potions[1][key] for key in find_room_potions[1]}
+            self.score = self.health
+            print(f"Health Score: {self.score}")
+            for potion in found_potions['value']:
+                print(f"Potion Bonus! +{potion} points")
+                self.score = self.score + potion
+            print(f"Final Score: {self.score}")
+            return self.score

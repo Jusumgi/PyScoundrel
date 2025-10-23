@@ -4,16 +4,18 @@ def find_cards(suit, room):
     foundCard = False
     foundCards = {
         'available': [],
-        'value': [],
-        'room_position': []
+        'rank': [],
+        'room_position': [],
+        'value': []
     }
     # "Renders" the room in search of cards
     for index, card in enumerate(room.cards):
         if card.suit_name == suit:
             foundCard = True
-            foundCards["available"].append(card)
-            foundCards["value"].append(str(card.rank)[0])
+            foundCards['available'].append(card)
+            foundCards['rank'].append(str(card.rank)[0]) # card.rank[0] is returning the first character of ranks, like King becomes "K"
             foundCards['room_position'].append(index)
+            foundCards['value'].append(card.value)
         
     return foundCard, foundCards
 

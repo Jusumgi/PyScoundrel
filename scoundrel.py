@@ -1,11 +1,12 @@
 from tools import *
 from card_tools import *
 from Game import Game
-
+score_history = []
 def mainMenu():
+    high_score = max(score_history)
     while True:
-        clear_screen()
-        print("Welcome to Scoundrel")
+        # clear_screen()
+        print(f"Welcome to Scoundrel | High Score: {high_score}")
         print("Press 1 to Start")
         print("Press 2 for Rules/About")
         print("Press q to Quit")
@@ -13,6 +14,8 @@ def mainMenu():
         match response:
             case '1':
                 gameInstance = Game()
+                if not gameInstance.quit_game:
+                    score_history.append(gameInstance.score)
             case '2':
                 clear_screen()
                 print("Scoundrel is a single-player Rogue-like card game by Zach Gage and Kurt Bieg")
