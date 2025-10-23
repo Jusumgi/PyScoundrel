@@ -14,6 +14,7 @@ class Game:
         self.undead = False
         self.quit_game = False
         self.enemies = 0
+        self.score = 0
         self.playGame(self.newGame())
     
     def printUI(self):
@@ -28,7 +29,7 @@ class Game:
         deck.shuffle()
         return deck
     def playGame(self, deck):
-        """ Game plays until enemies are 0 or self ends the game"""
+        """ Game plays until enemies are 0 or player ends the game"""
         room = deck.draw_n(4)
         
         # Check the room and if the card suit is 0 or 1 (Clubs or Spades) then add 1 to enemies counter.
@@ -170,7 +171,7 @@ class Game:
                                                 self.health = self.health - damage
                                                 room.remove_card(enemyPosition)
                                                 self.enemies = self.enemies-1
-                                                print(f"self takes {damage} damage")
+                                                print(f"Scoundrel takes {damage} damage")
                                                 print(f"Health: {self.health}")
                                                 input()
                                                 break
