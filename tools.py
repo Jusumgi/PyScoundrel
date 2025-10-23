@@ -38,6 +38,7 @@ def open_pdf(file_path):
 def lowerisUpper(input):
     """
     Converts inputs to uppercase, typically using this for single-character inputs.
+    Allows me to ensure Alphabet characters are uppercased while numbers are left alone.
     You may ask "Why is this needed?"; a mystery to be certain.
     """
     if input.lower() == input:

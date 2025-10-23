@@ -29,7 +29,6 @@ def drawRoom(deck, room):
         except:
             print("end of deck")
             break
-    print(room.cards)
     return room
 
 def remove_cards_from_deck(deck, remove_list):

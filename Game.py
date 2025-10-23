@@ -51,7 +51,7 @@ class Game:
                 if self.health <= 0 and self.undead == False:
                     print(f"Alas, you have fallen in battle.")
                     print("Continue as an undead? y/n" ) 
-                    deathChoice = lowerisUpper(input())
+                    deathChoice = input().upper()
                     if deathChoice == 'Y':
                         self.undead = True
                         print("Resurrecting as an undead.")
@@ -91,11 +91,11 @@ class Game:
                     print_cards_horizontal(room)
                     print('What would you like to do?')
                     print("a - Attack | w - Wield | p - Use Potion | f - Flee | q - Quit")
-                    choice = getchit()
+                    choice = getchit().upper()
                     match choice:
 
                         # Attack
-                        case 'a':
+                        case 'A':
                             findClubs = find_cards("Clubs", room)
                             findSpades = find_cards("Spades", room)
                             foundEnemies = {key: findClubs[1][key] + findSpades[1][key] for key in findClubs[1]}
@@ -111,7 +111,7 @@ class Game:
                                 # Input will accept c for cancel, and the rank of the card to target. If the rank isn't present, it is an invalid selection.
                                 while True:
                                     try:
-                                        enemyChoice = lowerisUpper(getchit())
+                                        enemyChoice = getchit().upper()
                                         if enemyChoice == 'C':
                                             break
                                         selectedEnemy = foundEnemies["value"].index(enemyChoice)
@@ -136,9 +136,9 @@ class Game:
 
                                 # If a valid rank is selected and the prompt wasn't cancels, we continue to the next loop
                                 while True:
-                                    weapon = getchit()
+                                    weapon = getchit().upper()
                                     match weapon:
-                                        case 'w':
+                                        case 'W':
                                             try: 
                                                 while True:
                                                     if self.weapon == 0:
@@ -177,9 +177,10 @@ class Game:
                                                 break
                                             except:
                                                 print("Your weapon would break from this attack.")
+                                                print("You will need to use your bare hands or find a new weapon for this monster.")
                                                 input()
                                                 
-                                        case 'b':
+                                        case 'B':
                                             weapon = 0
                                             damage = enemyStrength - weapon
                                             if damage <= 0:
@@ -211,7 +212,7 @@ class Game:
                                 print(Style.RESET_ALL)
                                 print("Select a weapon by typing it's rank or enter c to cancel")
                                 while True:
-                                    weaponChoice = lowerisUpper(getchit())
+                                    weaponChoice = getchit().upper()
                                     if weaponChoice == 'C':
                                             break
                                     if weaponChoice in foundWeapons['value']:
@@ -230,7 +231,7 @@ class Game:
                             break
 
                         # Use Potion
-                        case 'p':
+                        case 'P':
                             findHearts = find_cards("Hearts", room)
                             foundPotions = findHearts[1]
                             if findHearts[0]:
@@ -244,7 +245,7 @@ class Game:
                                 print("Select a potion by typing it's rank or enter c to cancel")
                                 while True:
                                     try:
-                                        potionChoice = lowerisUpper(getchit())
+                                        potionChoice = getchit().upper()
                                         if potionChoice == 'C':
                                             break
                                         selectedPotion = foundPotions["value"].index(potionChoice)
@@ -271,7 +272,7 @@ class Game:
                             break
 
                         # Flee Room
-                        case 'f':
+                        case 'F':
                             if self.flee_use < 2:
                                 print("You are exhausted and cannot flee.")
                                 getchit()
@@ -286,9 +287,9 @@ class Game:
                                 break
 
                         # Quit Game
-                        case 'q':
+                        case 'Q':
                             print("Are you sure you want to quit? y/n")
-                            quitChoice = lowerisUpper(getchit())
+                            quitChoice = getchit().upper()
                             if quitChoice == "Y":
                                 self.quit_game = True
                             break

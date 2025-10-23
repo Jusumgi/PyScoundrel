@@ -26,7 +26,7 @@ def mainMenu():
                 print("* Weapons block incoming damage and when initially equipped have 'first strike' which allows you to hit any enemy.")
                 print("* After an enemy has been hit with a weapon, the player incurs Durability where the next enemy struck must be less than the strength/rank of the monster before it.")
                 print("* Potions can effectively be used once per room. Any other potions used in the same room have no effect and are wasted/discarded.")
-                pdfcall = getchit()
+                pdfcall = getchit().upper()
                 if lowerisUpper(pdfcall) == 'H':
                     open_pdf('Scoundrel.pdf')
             case 'q':
