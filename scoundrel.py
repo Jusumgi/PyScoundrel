@@ -3,7 +3,10 @@ from card_tools import *
 from Game import Game
 score_history = []
 def mainMenu():
-    high_score = max(score_history)
+    try:
+        high_score = max(score_history)
+    except ValueError:
+        high_score = 0
     while True:
         # clear_screen()
         print(f"Welcome to Scoundrel | High Score: {high_score}")

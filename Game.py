@@ -4,7 +4,7 @@ from tools import *
 from colorama import Fore, Style
 class Game:
     def __init__(self):
-        self.health = 200
+        self.health = 20
         self.weapon = 0
         self.first_strike = False
         self.durability = 14
@@ -18,7 +18,7 @@ class Game:
         self.playGame(self.newGame())
     
     def printUI(self):
-        print(f"{Fore.RED}❤ {self.health}{Fore.RED}❤ {Style.RESET_ALL}| {Fore.YELLOW}⚔ {self.weapon}{Style.RESET_ALL}:{Fore.CYAN}{self.durability} ⚔ {Style.RESET_ALL}| {self.enemies} enemies left")
+        print(f"{Fore.RED}❤{self.health}{Fore.RED}❤ {Style.RESET_ALL}| {Fore.YELLOW}⚔ {self.weapon}{Style.RESET_ALL}:{Fore.CYAN}{self.durability} ⚔ {Style.RESET_ALL}| {Fore.RED}Potion Use:{self.potion_use}{Style.RESET_ALL} | {self.enemies} enemies left")
     def newGame(self):
         """Generates new deck, removes cards for normal-mode"""
         freshdeck = Deck() # generate standard 52-card deck
