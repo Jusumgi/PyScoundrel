@@ -2,17 +2,18 @@ from tools import *
 from card_tools import *
 from Game import Game
 score_history = {
-    'easy': [],
-    'normal': []
+    'easy': [-208],
+    'normal': [-208]
 }
 def mainMenu():
+    score_history = loadFile('save/save.json')
     while True:
-        try:
-            easy_high_score = max(score_history['easy'])
-            normal_high_score = max(score_history['normal'])
-        except ValueError:
-            easy_high_score = -208
-            normal_high_score = -208
+        # try:
+        easy_high_score = max(score_history['easy'])
+        normal_high_score = max(score_history['normal'])
+        # except ValueError:
+        #     easy_high_score = -208
+        #     normal_high_score = -208
         # clear_screen()
         print(f"Welcome to Scoundrel")
         print(f"Press 1 to Start Easy | High Score: {easy_high_score}")
@@ -27,7 +28,7 @@ def mainMenu():
                     score_history['easy'].append(gameInstance.score)
             case '2':
                 gameInstance = Game('normal')
-                if not gameInstance.quit_game:
+                if gameInstance.quit_game:
                     score_history['normal'].append(gameInstance.score)
             case '3':
                 clear_screen()
@@ -48,5 +49,6 @@ def mainMenu():
                     open_pdf('Scoundrel.pdf')
             case 'q':
                 break
+        saveFile(score_history, 'save/save.json')
 mainMenu()
 
