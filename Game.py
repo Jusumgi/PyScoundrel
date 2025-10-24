@@ -43,7 +43,6 @@ class Game:
         while True:
                 # if self has pressed q while game is in session, exit the game session.
                 if self.quit_game: 
-                    self.calculate_score(deck, room)
                     break
 
 
