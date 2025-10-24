@@ -1,17 +1,22 @@
 from tools import *
 from card_tools import *
 from Game import Game
-score_history = []
+score_history = {
+    'easy': [],
+    'normal': []
+}
 def mainMenu():
-    try:
-        high_score = max(score_history)
-    except ValueError:
-        high_score = 0
     while True:
+        try:
+            easy_high_score = max(score_history['easy'])
+            normal_high_score = max(score_history['normal'])
+        except ValueError:
+            easy_high_score = -208
+            normal_high_score = -208
         # clear_screen()
-        print(f"Welcome to Scoundrel | High Score: {high_score}")
-        print("Press 1 to Start Easy")
-        print("Press 2 to Start Normal")
+        print(f"Welcome to Scoundrel")
+        print(f"Press 1 to Start Easy | High Score: {easy_high_score}")
+        print(f"Press 2 to Start Normal | High Score: {normal_high_score}")
         print("Press 3 for Rules/About")
         print("Press q to Quit")
         response = getchit()
@@ -19,11 +24,11 @@ def mainMenu():
             case '1':
                 gameInstance = Game('easy')
                 if not gameInstance.quit_game:
-                    score_history.append(gameInstance.score)
+                    score_history['easy'].append(gameInstance.score)
             case '2':
                 gameInstance = Game('normal')
                 if not gameInstance.quit_game:
-                    score_history.append(gameInstance.score)
+                    score_history['normal'].append(gameInstance.score)
             case '3':
                 clear_screen()
                 print("Scoundrel is a single-player Rogue-like card game by Zach Gage and Kurt Bieg")
