@@ -251,16 +251,14 @@ class Game:
                                         potionChoice = getchit().upper()
                                         if potionChoice == 'C':
                                             break
-                                        selectedPotion = foundPotions["rank"].index(potionChoice)
-                                        potionPosition = foundPotions["room_position"][selectedPotion]
+                                        selectedPotion = foundPotions['rank'].index(potionChoice)
+                                        potionPosition = foundPotions['room_position'][selectedPotion]
                                         potionStrength = room.cards[potionPosition].value
                                         if potionChoice in foundPotions['rank'] and self.potion_use > 0 :
                                             if self.health+potionStrength>20 and self.difficulty == 'normal':
-                                                self.health = 20
+                                                self.health = self.heal_potion(20,self.health, potionStrength)
                                             else:
-                                                self.health = self.health + potionStrength
-                                            print(f"This potion heals for {potionStrength} health.")
-                                            print(f"Your health is now {self.health}")
+                                                self.health = self.heal_potion(200,self.health, potionStrength)
                                             getchit()
                                             self.potion_use = 0
                                             room.remove_card(potionPosition)
@@ -330,3 +328,11 @@ class Game:
                 self.score = self.score + potion
             print(f"Final Score: {self.score}")
             return self.score
+    def heal_potion(self, max_health, current_health, potion_value):
+        #Calculates heal amount based on max health and current health, while respecting the bounds of potion value
+        heal_amount = min(potion_value, max_health - current_health)
+        print(f"This potion heals for {heal_amount} health.")
+        new_health = current_health + heal_amount
+        print(f"Your health is now {new_health}")
+        return new_health
+
