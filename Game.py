@@ -3,7 +3,7 @@ from card_tools import *
 from tools import *
 from colorama import Fore, Style
 class Game:
-    def __init__(self):
+    def __init__(self, difficulty):
         self.health = 20
         self.weapon = 0
         self.first_strike = False
@@ -15,6 +15,7 @@ class Game:
         self.quit_game = False
         self.enemies = 0
         self.score = 0
+        self.difficulty = difficulty
         self.playGame(self.newGame())
     
     def printUI(self):
@@ -254,7 +255,10 @@ class Game:
                                         potionPosition = foundPotions["room_position"][selectedPotion]
                                         potionStrength = room.cards[potionPosition].value
                                         if potionChoice in foundPotions['rank'] and self.potion_use > 0 :
-                                            self.health = self.health + potionStrength
+                                            if self.health+potionStrength>20 and self.difficulty == 'normal':
+                                                self.health = 20
+                                            else:
+                                                self.health = self.health + potionStrength
                                             print(f"This potion heals for {potionStrength} health.")
                                             print(f"Your health is now {self.health}")
                                             getchit()
