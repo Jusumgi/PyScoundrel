@@ -1,9 +1,13 @@
 import os
 import platform
 import webbrowser
+import json
 
 system = platform.system()
 def getchit():
+    """
+    Allows for character input for faster UI experience, no matter which platform the script is run on.
+    """
     if system == "Windows":
         import msvcrt
         byte_input = msvcrt.getch()
@@ -15,6 +19,9 @@ def getchit():
     else:
         print("Operating System not supported")
 def clear_screen():
+    """
+    Allows for clear screen to occur no matter which platform the script is run on.
+    """
     if system == "Windows":
         os.system('cls')
     elif system == "Linux" or system == "Darwin":
@@ -28,11 +35,22 @@ def open_pdf(file_path):
         print(f"Opened PDF: {file_path}")
     else:
         print(f"Error: PDF file not found at {file_path}")
-        
-def lowerisUpper(input):
-# Converts inputs to uppercase, typically using this for single-character inputs.
-# You may ask "Why is this needed?"; a mystery to be certain.
-    if input.lower() == input:
-        return input.upper()
-    else:
-        return input
+
+def saveFile(data, filename):
+    # If the folder isn't created yet, then create it.
+    folder_path = "save/"
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+    with open(filename, 'w') as file:
+        json.dump(data, file, indent=4)
+
+def loadFile(filename):
+    try:
+        with open(filename, 'r') as file:
+            data = json.load(file)
+            return data
+    except FileNotFoundError:
+        return None
+def createFolder(folder_path):
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)

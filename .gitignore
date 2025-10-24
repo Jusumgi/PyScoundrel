@@ -1,6 +1,7 @@
 /.vscode
 /__pycache__
 /venv
+/save
 custom/playingcardsscoundrel/__pycache__
 scoundrelpy/
 dist/
