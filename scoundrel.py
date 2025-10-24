@@ -26,10 +26,12 @@ def mainMenu():
                 gameInstance = Game('easy')
                 if not gameInstance.quit_game:
                     score_history['easy'].append(gameInstance.score)
+                    input()
             case '2':
                 gameInstance = Game('normal')
                 if not gameInstance.quit_game:
                     score_history['normal'].append(gameInstance.score)
+                    input()
             case '3':
                 clear_screen()
                 print("Scoundrel is a single-player Rogue-like card game by Zach Gage and Kurt Bieg")
